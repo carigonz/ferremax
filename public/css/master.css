@@ -14,7 +14,7 @@ li {
 
 a {
     text-decoration: none;
-    color: #000;
+    color: var(--main-link-color);
 }
 
 body {
@@ -29,17 +29,25 @@ body {
     display: none;
 }
 
+/* variables */
+:root {
+    --main-link-color: #ffffff;
+    --main-link-colorHover: #f8d432;
+    --main-bg-light: #fafafa;
+}
+
 /* master section */
 .container-fluid {
     width: 100vw;
     padding-left: 0;
 }
 .footer-main {
-    background: #fafafa;
+    background: var(--main-bg-light);
     padding: 35px 20px;
     text-align: center;
 }
 .footer-main > ul a {
     padding: 5px 5px;
     font-size: 1.3rem;
+    color: #000000;
 }

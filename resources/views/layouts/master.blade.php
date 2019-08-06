@@ -38,9 +38,6 @@
 							<li class="nav-item active">
 								<a class="nav-link" href="#">Something<span class="sr-only">(current)</span></a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="#">Historial</a>
-							</li>
 							<li class="nav-item dropdown">
 								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Presupuesto
@@ -50,16 +47,39 @@
 									<a class="dropdown-item" href="#">Historial</a>
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="#">Something else here</a>
+									<a class="dropdown-item" href="{{ route('logout') }}"
+									onclick="event.preventDefault();
+																document.getElementById('logout-form').submit();">
+									 {{ __('Logout') }}
+							 		</a>
+							 		<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+									 @csrf
+									 </form>
 								</div>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-							</li>
 						</ul>
-						<form class="form-inline my-2 my-lg-0">
+
+						<div class="flex-center position-ref full-height">
+								@if (Route::has('login'))
+										<div class="top-right links">
+												@auth
+												<form class="form-inline my-2 my-lg-0">
+														<input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
+														<button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+													</form> 
+												@else
+														<a class="nav-item" href="{{ route('login') }}">Login</a>
+		
+														@if (Route::has('register'))
+																<a href="{{ route('register') }}">Register</a>
+														@endif
+												@endauth
+										</div>
+								@endif
+						{{--<form class="form-inline my-2 my-lg-0">
 							<input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
 							<button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
-						</form>
+						</form> --}}
 					</div>
 				</nav>
 		</header>
@@ -67,8 +87,8 @@
 		@yield('main')
 		<footer class="footer-main">
 			<ul>
-				<a href="http://facebook.com" target="_blank"><i class="fab fa-facebook"></i> </a>
-				<a href="http://instagram.com" target="_blank"><i class="fab fa-instagram"></i> </a>
+				<a href="http://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+				<a href="http://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
 				<a href="http://plus.google.com" target="_blank"><i class="fab fa-google-plus"></i></a>
 				<a href="http://twitter.com" target="_blank"><i class="fab fa-twitter"></i> </a>
 			</ul>
