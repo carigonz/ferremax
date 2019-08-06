@@ -1,0 +1,32 @@
+/* searcher.blade.php */
+.body-container-searcher {
+    height: 100vh;
+    background-color: bisque;
+    display: flex;
+}
+.big-searcher {
+    width: 80vw;
+    height: 68px;
+    font-size: 1.5rem;
+}
+.search-button {
+    height: 68px;
+    width: 90px;
+    border-radius: 50px;
+}
+.btn .fas.fa-search.big {
+    font-size: 35px;
+}
+
+@media (min-width: 576px) {
+    .form-inline .form-control.big-searcher {
+        width: 80vw;
+        height: 68px;
+        font-size: 1.5rem;
+    }
+    .form-inline .btn.search-button {
+        height: 68px;
+        width: 90px;
+        border-radius: 50px;
+    }
+}

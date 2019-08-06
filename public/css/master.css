@@ -1,0 +1,45 @@
+/* reseteos generales */
+* {
+    box-sizing: border-box;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+body {
+    margin: 0%;
+    height: 100%;
+    font-family: 'Varela Round', 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 0;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* master section */
+.container-fluid {
+    width: 100vw;
+    padding-left: 0;
+}
+.footer-main {
+    background: #fafafa;
+    padding: 35px 20px;
+    text-align: center;
+}
+.footer-main > ul a {
+    padding: 5px 5px;
+    font-size: 1.3rem;
+}
