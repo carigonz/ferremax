@@ -28,7 +28,7 @@
   <body class="container-fluid">
     <header class="header-container">
 			<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-					<a class="navbar-brand" href="#"><img src="{{ asset('images/logo-ferremax.jpg')}}" alt="logo" style="height: 25px;"></a>
+			<a class="navbar-brand" href="/"><img src="{{ asset('images/logo-ferremax.jpg')}}" alt="logo" style="height: 25px;"></a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>

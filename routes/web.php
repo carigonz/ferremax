@@ -15,6 +15,12 @@ Route::get('/', function () {
     return view('searcher');
 });
 
+Route::get('/ingresar', 'ProductController@newProduct')->name('newProduct');
+Route::post('/ingresar', 'ProductController@create');
+Route::get('success', function () {
+    return view('success');
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

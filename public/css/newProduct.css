@@ -1,0 +1,19 @@
+/* searcher.blade.php */
+.container-new-product {
+    height: 100vh;
+    background-color: bisque;
+    display: flex;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-width: 400px;
+}
+
+.form-items {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}

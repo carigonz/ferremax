@@ -8,6 +8,9 @@
 
 @section('main')
 <main class="body-container-searcher">
+		<div class="button-item">
+				<input type ='button' data-toggle="button" aria-pressed="false" autocomplete="off" class="btn btn-warning"  value = 'Nuevo Producto' onclick="location.href = '{{ Route('newProduct') }}'"/>
+		</div>
 		<div class="jumbotron m-auto">
 				<h1 class="display-4">Hello, world!</h1>
 				<p class="lead">Este va a ser el buscador principal</p>

@@ -18,11 +18,11 @@ class Products extends Migration
             $table->string('code')->unique();
             $table->string('name');
             $table->unsignedDecimal('price', 8, 2);
-            $table->foreign('id_supplier')->references('id')->on('suppliers')->onDelete('cascade');
+            $table->bigInteger('id_supplier')->unsigned()->index();
+            $table->foreign('id_supplier')->references('id')->on('suppliers');
             $table->text('description')->nullable();
             $table->unsignedInteger('stock')->nullable();
             $table->string('avatar')->nullable();
-            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -34,6 +34,6 @@ class Products extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('products');
     }
 }

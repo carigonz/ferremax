@@ -13,12 +13,11 @@ class Suppliers extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('suppliers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->decimal('discount', 2, 2)->nullable();
             $table->string('rubro');
-            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +30,6 @@ class Suppliers extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('suppliers');
     }
 }

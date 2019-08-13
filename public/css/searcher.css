@@ -17,7 +17,16 @@
 .btn .fas.fa-search.big {
     font-size: 35px;
 }
-
+.button-item {
+    position: absolute;
+    right: 4vw;
+    top: 10vh;
+}
+.button-item button {
+    -webkit-box-shadow: 0 5px 20px 8px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 5px 20px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 20px 8px rgba(0, 0, 0, 0.5);
+}
 @media (min-width: 576px) {
     .form-inline .form-control.big-searcher {
         width: 80vw;
