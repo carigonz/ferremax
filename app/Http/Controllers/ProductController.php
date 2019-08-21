@@ -55,7 +55,58 @@ class ProductController extends Controller
         return Validator::make($data, $rules, $messages);
     }
 
-    public function update(Request $request) {
+    public function action(Request $request)
+    {
+        if($request->ajax())
+        {
+            $query = $Request->get('query');
+            //dd($query);
+            if($query != ''){
+
+                $data = Product::where("name", "LIKE", "%" . $query . "%")
+                ->orwhere("description", "LIKE", "%" . $query . "%")
+                ->orderBy('id_supplier');
+
+            }else {
+                $data = Product::all();
+            }
+
+            $suppliers = Supplier::all();
+            $total_row = $data->count();
+            if($total_row>0){
+                $i = 1;
+                foreach ($data as $row) {
+                    $output .=`
+                    <tr>
+                        <th scope="row">$i</th>
+                        <td>$row->name</td>
+                        <td>$row->desc</td>
+                        <td>$row->id_supplier (?</td>
+                        <td>$row->price*1.6</td>
+                    </tr>
+                    `;
+                    $i++;
+                }
+            } else{
+                    $output = `
+                    <tr>
+                        <td>No data found</td>
+                    <tr>
+                    `;
+                }
+            $data = array(
+                'table_data' => $output,
+                'total_data' => $total_data,
+                'suppliers_data' => $suppliers
+            );
+            console.log($data);
+            return json_encode($data);
+            }
+        }
+    }
+
+    function update(Request $request)
+    {
         /**
          * Validate request/input 
          **/
@@ -132,4 +183,3 @@ class ProductController extends Controller
         return redirect(route('home'));
         //dd ($usuario);
     }
-}

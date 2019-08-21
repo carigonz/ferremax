@@ -22,10 +22,22 @@
     right: 4vw;
     top: 10vh;
 }
-.button-item button {
+.button-item input {
     -webkit-box-shadow: 0 5px 20px 8px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 0 5px 20px 8px rgba(0, 0, 0, 0.5);
     box-shadow: 0 5px 20px 8px rgba(0, 0, 0, 0.5);
+}
+.button-item input:hover {
+    -webkit-box-shadow: 0 5px 20px 8px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 5px 20px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 20px 8px rgba(0, 0, 0, 0.5);
+}
+.table {
+    width: 95%;
+    margin: 0 auto;
+}
+.table-container {
+    margin-bottom: 3rem;
 }
 @media (min-width: 576px) {
     .form-inline .form-control.big-searcher {

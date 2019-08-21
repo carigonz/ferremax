@@ -20,6 +20,8 @@ Route::post('/ingresar', 'ProductController@create');
 Route::get('success', function () {
     return view('success');
 });
+Route::get('/search', 'ProductController@search');
+Route::get('/search/action', 'ProductController@action')->name('search.action');
 
 Auth::routes();
 
