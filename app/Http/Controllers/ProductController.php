@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Supplier;
 use App\Product;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -48,12 +49,23 @@ class ProductController extends Controller
 
                 $data = Product::where("name", "LIKE", "%" . $query . "%")
                 ->orwhere("description", "LIKE", "%" . $query . "%")
-                ->orderBy('id_supplier')
+                ->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
+                ->orderBy('name')
                 ->get();
 
             }else {
-                $data = Product::all();
+                /* $data = Product::all();
+                $data->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
+                ->get(); */
+                $data =  DB::table('products')
+                ->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
+                //->crossJoin('suppliers')
+                //->select('products.*','id_supplier as suppliers.factoryName','suppliers.discount')
+                ->orderBy('name')
+                ->get();
+
             }
+
             $total_row = $data->count();
             if($total_row>0){
                 $i = 1;
@@ -61,9 +73,10 @@ class ProductController extends Controller
                     $output.='<tr>'.
                     '<th scope="row">'.$i.'</th>'.
                     '<td>'.$product->name.'</td>'.
-                    '<td>'.$product->id_supplier.'</td>'.
-                    '<td>'.$product->description.'</td>'.
+                    '<td>'.$product->factoryName.'</td>'.
+                    '<td>'.$product->discount.'</td>'.
                     '<td>'.$product->price.'</td>'.
+                    '<td>'.$product->price*1.6.'</td>'.
                     '</tr>';
                     $i++;
                 }
@@ -85,7 +98,7 @@ class ProductController extends Controller
         }
         else {
             $query = $Request->get('query');
-            dd($query);
+            //($query);
         }
     }
 

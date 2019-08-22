@@ -1,6 +1,6 @@
 /* searcher.blade.php */
 .body-container-searcher {
-    height: 100vh;
+    min-height: 100vh;
     background-color: bisque;
     display: flex;
 }

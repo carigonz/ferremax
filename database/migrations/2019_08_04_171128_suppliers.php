@@ -15,7 +15,7 @@ class Suppliers extends Migration
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('factoryName');
             $table->decimal('discount', 2, 2)->nullable();
             $table->string('rubro');
             $table->timestamps();
