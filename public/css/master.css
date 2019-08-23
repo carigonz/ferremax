@@ -31,7 +31,7 @@ body {
 
 /* variables */
 :root {
-    --main-link-color: #ffffff;
+    --main-link-color: #000000;
     --main-link-colorHover: #f8d432;
     --main-bg-light: #fafafa;
 }

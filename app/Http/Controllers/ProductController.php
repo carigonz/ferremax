@@ -17,6 +17,7 @@ class ProductController extends Controller
         return view('newProduct')->with('suppliers',$suppliers);
     } 
 
+
     public function create(Request $data)
     {
         $product = Product::create([
@@ -54,9 +55,6 @@ class ProductController extends Controller
                 ->get();
 
             }else {
-                /* $data = Product::all();
-                $data->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
-                ->get(); */
                 $data =  DB::table('products')
                 ->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
                 //->crossJoin('suppliers')
@@ -74,7 +72,7 @@ class ProductController extends Controller
                     '<th scope="row">'.$i.'</th>'.
                     '<td>'.$product->name.'</td>'.
                     '<td>'.$product->factoryName.'</td>'.
-                    '<td>'.$product->discount.'</td>'.
+                    '<td>'.$product->discount*100 .' %</td>'.
                     '<td>'.$product->price.'</td>'.
                     '<td>'.$product->price*1.6.'</td>'.
                     '</tr>';
