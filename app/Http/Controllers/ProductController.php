@@ -50,6 +50,7 @@ class ProductController extends Controller
 
                 $data = Product::where("name", "LIKE", "%" . $query . "%")
                 ->orwhere("description", "LIKE", "%" . $query . "%")
+                ->orwhere("code", "LIKE", "%" . $query . "%")
                 ->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
                 ->orderBy('name')
                 ->get();
@@ -68,15 +69,31 @@ class ProductController extends Controller
             if($total_row>0){
                 $i = 1;
                 foreach ($data as $key => $product) {
+                    if ($product->price){
                     $output.='<tr>'.
                     '<th scope="row">'.$i.'</th>'.
                     '<td>'.$product->name.'</td>'.
+                    '<td>'.$product->description.'</td>'.
                     '<td>'.$product->factoryName.'</td>'.
-                    '<td>'.$product->discount*100 .' %</td>'.
+                    '<td class="d-none">'.$product->discount*100 .' %</td>'.
                     '<td>'.$product->price.'</td>'.
-                    '<td>'.$product->price*1.6.'</td>'.
+                    '<td class="bg-success text-center">'.round($product->price*1.6,2).'</td>'.
                     '</tr>';
                     $i++;
+                    } else {
+                        $output.='<tr>'.
+                        '<th scope="row">'.$i.'</th>'.
+                        '<td>'.$product->name.'</td>'.
+                        '<td>'.$product->description.'</td>'.
+                        '<td>'.$product->factoryName.'</td>'.
+                        '<td class="d-none">'.$product->discount*100 .' %</td>'.
+                        '<td>'.$product->price.'</td>'.
+                        '<td class="bg-success text-center">'.
+                        round(($product->price-($product->price*$product->discount))*1.6,2)
+                        .'</td>'.
+                        '</tr>';
+                        $i++;
+                    }
                 }
             } else{
                     $output .= '

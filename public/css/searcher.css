@@ -38,9 +38,14 @@
 .table {
     width: 95%;
     margin: 0 auto;
+    font-size: 1.3em;
 }
 .table-container {
     margin-bottom: 3rem;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 255, 0, 0.075);
 }
 @media (min-width: 576px) {
     .form-inline .form-control.big-searcher {

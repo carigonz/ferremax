@@ -29,15 +29,16 @@
 			<section class="table-container">
 				<div class="table table-responsive">
 					<h4>Total data: <span id="total_records"></span></h4>
-						<table class="table table-sm">
+						<table class=" table table-hover table-striped table-sm">
 								<thead>
 									<tr>
-										<th scope="col">#</th>
-										<th scope="col">Nombre</th>
-										<th scope="col">Proveedor</th>
-										<th scope="col">Descuento</th>
-										<th scope="col">Costo</th>
-										<th scope="col">Publico</th>
+										<th scope="col" class="table-info">#</th>
+										<th scope="col" class="table-info">Nombre</th>
+										<th scope="col" class="table-info">Descripcion</th>
+										<th scope="col" class="table-info">Proveedor</th>
+										<th scope="col" class="table-info d-none">Descuento</th>
+										<th scope="col" class="table-info">Costo</th>
+										<th scope="col" class="bg-success text-center">Publico</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -56,6 +57,11 @@
 			let query = $(this).val();
 			fetchData(query);
 			//console.log(query);
+		});
+
+		$('.showDesc').click(function (e) { 
+			e.preventDefault();
+			$(selector).removeClass('hide');
 		});
 		function fetchData(query = '')
 		{
