@@ -12,16 +12,17 @@
 */
 
 Route::get('/', function () {
-    return view('searcher');
+    return view('welcome');
 });
 
-Route::get('/ingresar', 'ProductController@newProduct')->name('newProduct');
-Route::post('/ingresar', 'ProductController@create');
+Route::get('/ingresar', 'ProductController@newProduct')->middleware('auth')->name('newProduct');
+Route::post('/ingresar', 'ProductController@create')->middleware('auth');
 Route::get('success', function () {
     return view('success');
-});
-Route::get('/search', 'ProductController@search');
-Route::get('/search/action', 'ProductController@action')->name('search.action');
+})->middleware('auth'); 
+Route::get('/search', function () {
+    return view('searcher');})->middleware('auth')->name('search');
+Route::get('/search/action', 'ProductController@action')->middleware('auth')->name('search.action');
 
 Auth::routes();
 

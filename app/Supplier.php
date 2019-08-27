@@ -20,7 +20,7 @@ class Supplier extends Model
         $suppliers = Supplier::all();
         $suppNames = [];
         foreach ($suppliers as $supplier) {
-            $suppNames[]=($supplier->name);
+            $suppNames[]=($supplier->factoryName);
         }
         return $suppNames;
     }

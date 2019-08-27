@@ -6,35 +6,39 @@
 		
 @extends('layouts/master')
 
+{{-- @section('js')
+<script src="{{ asset('js/liveSearch.js') }}"></script>		
+@endsection --}}
 @section('main')
 <main class="body-container-searcher flex-column">
 		<div class="button-item">
 				<input type ='button' data-toggle="button" aria-pressed="false" autocomplete="off" class="btn btn-warning"  value = 'Nuevo Producto' onclick="location.href = '{{ Route('newProduct') }}'"/>
 		</div>
-		<div class="jumbotron m-auto">
+		<div class="jumbotron">
 				<p class="lead">Este va a ser el buscador principal</p>
-				<hr class="my-4">
-				<p>cuando creo la tabla del forEach de los resultados necesito un boton para agregar al nuevo presupuesto ?? </p>
+				<hr class="my-4">{{-- 
+				<p>cuando creo la tabla del forEach de los resultados necesito un boton para agregar al nuevo presupuesto ?? </p> --}}
 				<form class="form-inline" method="get">
 					
 					{{ csrf_field() }}
-				{{-- <input type="hidden" name="_token" id="login-token" value="{{ csrf_token()}}"> --}}
-						<input onfocus class="form-control mr-sm-2 big-searcher" type="text" name="query" id="query" placeholder="Buscar" aria-label="Search">
+						<input autofocus class="form-control mr-sm-2 big-searcher" type="text" name="query" id="query" placeholder="Solo tenés que tipear tu búsqueda" aria-label="Search">
 						{{-- <button  onclick="{{ Route('search.action') }}" id="query" class="btn btn-primary btn-md my-2 my-sm-0 search-button" type="submit"><i class="fas fa-search big"></i></button> --}}
 					</form>
 			</div>
+			
 			<section class="table-container">
 				<div class="table table-responsive">
-					<h3>Total data: <span id="total_records"></span></h3>
-						<table class="table table-sm">
+					<h4>Total data: <span id="total_records"></span></h4>
+						<table class=" table table-hover table-striped table-sm">
 								<thead>
 									<tr>
-										<th scope="col">#</th>
-										<th scope="col">Nombre</th>
-										<th scope="col">Proveedor</th>
-										<th scope="col">Descuento</th>
-										<th scope="col">Costo</th>
-										<th scope="col">Publico</th>
+										<th scope="col" class="table-info">#</th>
+										<th scope="col" class="table-info">Nombre</th>
+										<th scope="col" class="table-info">Descripcion</th>
+										<th scope="col" class="table-info">Proveedor</th>
+										<th scope="col" class="table-info d-none">Descuento</th>
+										<th scope="col" class="table-info">Costo</th>
+										<th scope="col" class="bg-success text-center">Publico</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -48,11 +52,16 @@
 
 <script>
 	$(document).ready(function () {
-		//fetchData();
+		fetchData();
 		$('#query').keyup( function(){
 			let query = $(this).val();
 			fetchData(query);
 			//console.log(query);
+		});
+
+		$('.showDesc').click(function (e) { 
+			e.preventDefault();
+			$(selector).removeClass('hide');
 		});
 		function fetchData(query = '')
 		{

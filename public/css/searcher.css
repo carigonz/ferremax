@@ -32,12 +32,20 @@
     -moz-box-shadow: 0 5px 20px 8px rgba(0, 0, 0, 0.5);
     box-shadow: 0 5px 20px 8px rgba(0, 0, 0, 0.5);
 }
+.jumbotron {
+    margin: 95px;
+}
 .table {
     width: 95%;
     margin: 0 auto;
+    font-size: 1.3em;
 }
 .table-container {
     margin-bottom: 3rem;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 255, 0, 0.075);
 }
 @media (min-width: 576px) {
     .form-inline .form-control.big-searcher {
