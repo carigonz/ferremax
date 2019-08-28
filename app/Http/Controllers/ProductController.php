@@ -39,7 +39,7 @@ class ProductController extends Controller
     function action(Request $request)
     {   //dd($request);
         //console.log($request);
-        $data;
+        $data = "";
         $output = 0;
         $suppliers = Supplier::all();
         $total_row = 0;
@@ -58,8 +58,6 @@ class ProductController extends Controller
             }else {
                 $data =  DB::table('products')
                 ->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
-                //->crossJoin('suppliers')
-                //->select('products.*','id_supplier as suppliers.factoryName','suppliers.discount')
                 ->orderBy('name')
                 ->get();
 
@@ -85,7 +83,7 @@ class ProductController extends Controller
                         '<th scope="row">'.$i.'</th>'.
                         '<td>'.$product->name.'</td>'.
                         '<td>'.$product->description.'</td>'.
-                        '<td>'.$product->factoryName.'</td>'.
+                        '<td data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">'.$product->factoryName.'</td>'.
                         '<td class="d-none">'.$product->discount*100 .' %</td>'.
                         '<td>'.$product->price.'</td>'.
                         '<td class="bg-success text-center">'.

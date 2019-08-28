@@ -29,6 +29,10 @@
 			<section class="table-container">
 				<div class="table table-responsive">
 					<h4>Total data: <span id="total_records"></span></h4>
+					<button type="button" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="top" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+						Popover on top
+					</button>
+					<a tabindex="0" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a>
 						<table class=" table table-hover table-striped table-sm">
 								<thead>
 									<tr>
@@ -58,6 +62,12 @@
 			fetchData(query);
 			//console.log(query);
 		});
+		$(function () {
+  $('[data-toggle="popover"]').popover()
+})
+		$('.popover-dismiss').popover({
+  trigger: 'focus'
+})
 
 		$('.showDesc').click(function (e) { 
 			e.preventDefault();
