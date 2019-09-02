@@ -20,9 +20,16 @@ Route::post('/ingresar', 'ProductController@create')->middleware('auth');
 Route::get('success', function () {
     return view('success');
 })->middleware('auth'); 
-Route::get('/search', function () {
-    return view('searcher');})->middleware('auth')->name('search');
+
+Route::get('/search', 'ProductController@search')->middleware('auth')->name('search');
+    
 Route::get('/search/action', 'ProductController@action')->middleware('auth')->name('search.action');
+
+Route::get('/update', 'ProductController@viewUpdate')->middleware('auth')->name('update');
+
+Route::post('update', 'ProductController@update')->middleware('auth');
+
+Route::get('/update/asd', 'ProductController@update')->middleware('auth')->name('update.product');
 
 Auth::routes();
 

@@ -33,12 +33,13 @@
     box-shadow: 0 5px 20px 8px rgba(0, 0, 0, 0.5);
 }
 .jumbotron {
-    margin: 95px;
+    margin: 80px;
+    margin-bottom: 15px;
 }
 .table {
     width: 95%;
     margin: 0 auto;
-    font-size: 1.3em;
+    font-size: 1.2em;
 }
 .table-container {
     margin-bottom: 3rem;
@@ -47,6 +48,45 @@
 .table-hover tbody tr:hover {
     background-color: rgba(0, 255, 0, 0.075);
 }
+.tooltip,
+.popover {
+    font-size: 1.2em;
+}
+#filters {
+    margin: 0 20px;
+}
+.suppliers ul li {
+    cursor: pointer;
+    padding: 10px 30px;
+    margin: 10px 20px;
+    background-color: rgb(30, 97, 241);
+    border-radius: 5px;
+}
+.categories-filter {
+    border: 4px double violet;
+    margin: 0 20px;
+    /* max-width: 60vw; */
+    margin-bottom: 15px;
+}
+/* .categories-filter ul li {
+    cursor: pointer;
+    padding: 8px 24px;
+    margin: 5px 20px;
+    background-color: rgb(30, 97, 241);
+    border-radius: 5px;
+} */
+
+.categories-filter ul li:hover {
+    border: 2px inset rgb(97, 218, 207);
+}
+
+.suppliers ul li a,
+.categories-filter ul li a {
+    margin: 5px 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
 @media (min-width: 576px) {
     .form-inline .form-control.big-searcher {
         width: 80vw;

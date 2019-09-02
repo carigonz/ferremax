@@ -17,7 +17,7 @@
 				<label for="code">Código: </label>
 				<input type="text" name="code" id="code">
 				<label for="price">Precio: </label>
-				<input type="number" min="0" step="any" name="price" id="prince">	
+				<input type="number" min="0" step="any" name="price" id="price">	
 				<label for="id_supplier">Proveedor: </label>
 				<select name="id_supplier" id="id_supplier">
 					<option selected value="0">Elija una opción</option>

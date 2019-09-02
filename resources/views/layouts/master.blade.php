@@ -37,7 +37,7 @@
 						
 						<ul class="navbar-nav mr-auto">
 							<li class="nav-item active">
-								<a class="nav-link" href="#">Something<span class="sr-only">(current)</span></a>
+							<a class="nav-link" href="{{ Route('update')}}">Actualizar<span class="sr-only">(current)</span></a>
 							</li>
 							@auth
 							<li class="nav-item dropdown">
@@ -73,9 +73,9 @@
 												@else
 														<a class="nav-item" href="{{ route('login') }}">Login</a>
 		
-														@if (Route::has('register'))
+														{{-- @if (Route::has('register'))
 																<a href="{{ route('register') }}">Register</a>
-														@endif
+														@endif --}}
 												@endauth
 										</div>
 								@endif
