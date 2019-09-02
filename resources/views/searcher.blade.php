@@ -25,45 +25,53 @@
 						{{-- <button  onclick="{{ Route('search.action') }}" id="query" class="btn btn-primary btn-md my-2 my-sm-0 search-button" type="submit"><i class="fas fa-search big"></i></button> --}}
 					</form>
 			</div>
-			
+			<section id="filters" class="d-flex flex-wrap justify-content-around ">
+				<div class="suppliers d-none">
+					<ul class="d-flex justify-content-around flex-wrap align-self-center flex-column">
+						@for ($i = 0; $i < count($suppliers); $i++)
+						<li><a href='#total_records' onClick="searchSupplier({{$i}})" id="{{$i}}">{{$suppliers[$i]}}</a></li>
+							
+						@endfor
+					</ul>
+				</div>
+				<div class="categories-filter d-flex flex-wrap ">
+					<ul class="d-flex justify-content-around flex-wrap categories align-self-center">
+						{{-- here comes filters --}}
+					</ul>
+				</div>
+		</section>
 			<section class="table-container">
 				<div class="table table-responsive">
 					<h4>Total data: <span id="total_records"></span></h4>
-						<table class=" table table-hover table-striped table-sm">
-								<thead>
-									<tr>
-										<th scope="col" class="table-info">#</th>
-										<th scope="col" class="table-info">Nombre</th>
-										<th scope="col" class="table-info">Descripcion</th>
-										<th scope="col" class="table-info">Proveedor</th>
-										<th scope="col" class="table-info d-none">Descuento</th>
-										<th scope="col" class="table-info">Costo</th>
-										<th scope="col" class="bg-success text-center">Publico</th>
-									</tr>
-								</thead>
-								<tbody>
+					
+					
+					<table id="table-container" class=" table table-hover table-striped table-sm">
+							<thead>
+								<tr>
+									<th scope="col" class="table-info">#</th>
+									<th scope="col" class="table-info">Nombre</th>
+									<th scope="col" class="table-info">Descripcion</th>
+									<th scope="col" class="table-info">Proveedor</th>
+									<th scope="col" class="table-info d-none">Descuento</th>
+									<th scope="col" class="table-info">Costo</th>
+									<th scope="col" class="bg-success text-center">Publico</th>
+								</tr>
+							</thead>
+							<tbody>
 
-
-								</tbody>
-							</table>
+								{{-- productController --}}
+							</tbody>
+						</table>
 				</div>
 			</section>
 </main>
 
 <script>
-	$(document).ready(function () {
-		fetchData();
-		$('#query').keyup( function(){
-			let query = $(this).val();
-			fetchData(query);
-			//console.log(query);
-		});
+	
 
-		$('.showDesc').click(function (e) { 
-			e.preventDefault();
-			$(selector).removeClass('hide');
-		});
-		function fetchData(query = '')
+	const filterButtons = ['pvc','ppn','bronce','polietileno','epoxi','galvanizado','sigas','redeco','duratop'];
+
+	function fetchData(query = '')
 		{
 			$.ajaxSetup({
         headers: {
@@ -78,13 +86,52 @@
 			}).done( function(data){
 					$('tbody').html(data.table_data);
 					$('#total_records').text(data.total_data);
-					console.log(data);
+					//console.log(data);
 				}
 			).fail( function(data){
-				console.log(data.responseJSON);
+				console.log(data.responseJSON.message);
 				console.log('pasaron cosas');
 			});
 		}
+
+	function searchSupplier(id){
+		//const totalData = fetchData().filter( product => product.id_supplier === id);
+		$('tbody').filter('a').css( "background-color", "red" );
+	}
+	
+	const searchFilter = (filter) => fetchData(filter);
+	
+	$(document).ready(function () {
+		fetchData();
+		$('#query').keyup( function(){
+			let query = $(this).val();
+			fetchData(query);
+			//console.log(query);
+		});
+		$(function () {
+			$('[data-toggle="popover"]').popover()
+		});
+				$('.popover-dismiss').popover({
+			trigger: 'focus'
+		});
+		$(function () {
+				$('[data-toggle="tooltip"]').tooltip();
+				$('[data-toggle="popover"]').popover();  
+				$('#table-container').on('all.bs.table', function (e, name, args) {
+						$('[data-toggle="tooltip"]').tooltip();
+						$('[data-toggle="popover"]').popover();  
+				});
+		});
+
+		//button filters
+		let rowFilter = '';
+		const buttons = filterButtons.map( filter => {
+			rowFilter += `
+				<li><a href='#total_records' onClick="searchFilter('`+filter+`')" id="`+filter+`" class="btn btn-success">`+filter+`</a></li>
+			`
+		});
+
+		$('.categories-filter .categories').append(rowFilter);
 	});
 </script>
 @endsection

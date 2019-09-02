@@ -11,13 +11,16 @@ class ProductController extends Controller
 {
     function newProduct(){
         $suppliers = Supplier::getNames();
-        //$vac = compact('suppliers'->$suppliers);
-        //$suppliers = Supplier::All()->get();
-        //dd($suppliers);
         return view('newProduct')->with('suppliers',$suppliers);
     } 
-
-
+    function viewUpdate(){
+        $suppliers = Supplier::getNames();
+        return view('update')->with('suppliers',$suppliers);
+    } 
+    function search(){
+        $suppliers = Supplier::getNames();
+        return view('searcher')->with('suppliers',$suppliers);
+    } 
     public function create(Request $data)
     {
         $product = Product::create([
@@ -39,7 +42,7 @@ class ProductController extends Controller
     function action(Request $request)
     {   //dd($request);
         //console.log($request);
-        $data;
+        $data = "";
         $output = 0;
         $suppliers = Supplier::all();
         $total_row = 0;
@@ -53,14 +56,14 @@ class ProductController extends Controller
                 ->orwhere("code", "LIKE", "%" . $query . "%")
                 ->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
                 ->orderBy('name')
+                ->orderBy('description')
                 ->get();
 
             }else {
                 $data =  DB::table('products')
                 ->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
-                //->crossJoin('suppliers')
-                //->select('products.*','id_supplier as suppliers.factoryName','suppliers.discount')
                 ->orderBy('name')
+                ->orderBy('description')
                 ->get();
 
             }
@@ -72,9 +75,10 @@ class ProductController extends Controller
                     if ($product->price){
                     $output.='<tr>'.
                     '<th scope="row">'.$i.'</th>'.
-                    '<td>'.$product->name.'</td>'.
-                    '<td>'.$product->description.'</td>'.
-                    '<td>'.$product->factoryName.'</td>'.
+                    '<td>'.strtoupper($product->name).'</td>'.
+                    '<td>'.ucfirst(strtolower($product->description)).'</td>'.
+                    '<td><a tabindex="0" href="#" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus" data-content="If you sort the ID col or use search or toggle or resize ... i will not exist any more !!!" title="descuento '.$product->discount*100
+                    .' %" data-html="true" class="">'.$product->factoryName.'</a></td>'.
                     '<td class="d-none">'.$product->discount*100 .' %</td>'.
                     '<td>'.$product->price.'</td>'.
                     '<td class="bg-success text-center">'.round($product->price*1.6,2).'</td>'.
@@ -83,9 +87,9 @@ class ProductController extends Controller
                     } else {
                         $output.='<tr>'.
                         '<th scope="row">'.$i.'</th>'.
-                        '<td>'.$product->name.'</td>'.
-                        '<td>'.$product->description.'</td>'.
-                        '<td>'.$product->factoryName.'</td>'.
+                        '<td>'.strtoupper($product->name).'</td>'.
+                        '<td>'.ucfirst(strtolower($product->description)).'</td>'.
+                        '<td><a tabindex="0" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus" data-content="If you sort the ID col or use search or toggle or resize ... i will not exist any more !!!" title="Descuento" data-html="true" class="">'.$product->factoryName.'</a></td>'.
                         '<td class="d-none">'.$product->discount*100 .' %</td>'.
                         '<td>'.$product->price.'</td>'.
                         '<td class="bg-success text-center">'.
@@ -115,6 +119,16 @@ class ProductController extends Controller
             $query = $Request->get('query');
             //($query);
         }
+    }
+
+    public function update(Request $request){
+
+        dd($request);
+
+
+
+
+
     }
 
 }

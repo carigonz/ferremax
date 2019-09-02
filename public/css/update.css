@@ -1,0 +1,15 @@
+.main-container-update {
+    height: 100vh;
+}
+
+.container-json-update,
+.container-item-update {
+    margin-bottom: 30px;
+    background-color: greenyellow;
+    padding: 30px;
+    min-height: 300px;
+    width: 80vw;
+}
+.form-container {
+    max-width: 360px;
+}
