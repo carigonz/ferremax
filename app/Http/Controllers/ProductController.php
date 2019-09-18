@@ -124,10 +124,10 @@ class ProductController extends Controller
 
     public function csvToArray($filename = '', $delimiter = ';')
     {
-        if (!file_exists($filename) || !is_readable($filename)){return false;}
-            //dd($filename,file_exists($filename), is_readable($filename));
-            //return false;
-
+        if (!file_exists($filename) || !is_readable($filename)){
+            return false;
+        }
+        //dd($filename,file_exists($filename), is_readable($filename));
         $header = null;
         $data = array();
         if (($handle = fopen($filename, 'r')) !== false)
@@ -146,13 +146,7 @@ class ProductController extends Controller
     }
     public function update(Request $request){
 
-        $path = $request->file('csv_file')->store('storage/files');
-        $basename = $request->file('csv_file')->getRealPath();
-        
-
-        //dd($request->hasFile('csv_file'));
-        dd($this->csvToArray($basename));
-        if (!$request->product){
+        if ($request->product){
 
             $data = Product::where('code', '=' , $request->code)->get();
             //dd($data[0]->id_supplier, $request->all());
@@ -165,51 +159,29 @@ class ProductController extends Controller
                 //como tiro un warning de que la data esta mal???
             }
             
-        } else if($request->hasFile('csv_file')) {
+        } 
+        if($request->hasFile('csv_file')) {
 
-            dd($this->csvToArray($basename));
+            $path = $request->file('csv_file')->store('storage/files');
+            $basename = $request->file('csv_file')->getRealPath();
+            $data = $this->csvToArray($basename);
 
-            $data = Product::where('id_supplier', '=', $request->id_supplier)->get();
-
-            /*
-                Ejemplo de lectura de CSV
-                desde PHP
-                Visita parzibyte.me/blog
-            */
-            # La longitud máxima de la línea del CSV. Si no la sabes,
-            # ponla en 0 pero la lectura será un poco más lenta
-            $longitudDeLinea = 1000;
-            $delimitador = ","; # Separador de columnas
-            $caracterCircundante = '"'; # A veces los valores son encerrados entre comillas
-            //$nombreArchivo = "productos.csv"; #Ruta del archivo, en este caso está junto a este script
-            # Abrir el archivo
-            $gestor = fopen($request, "r");
-            if (!$gestor) {
-                exit("No se puede abrir el archivo $nombreArchivo");
-            }
-            #  Comenzar a leer, $numeroDeFila es para llevar un índice
-            $numeroDeFila = 1;
-            while (($fila = fgetcsv($gestor, $longitudDeLinea, $delimitador, $caracterCircundante)) !== false) {
-                if ($numeroDeFila === 1) {
-                    echo "Los encabezados son: ";
+            foreach ($data as $row=> $product) {
+                $item = Product::where('code', '=', $product['code'])->get();
+                $item = $item->toArray();
+                //dd($item);
+                
+                if($item){
+                    //actualizar
+                    $item2 = Product::find($item[0]['id'])->update(['price' => $product['price']]);
+                    dd(Product::find($item[0]['id']));
                 }
-                # Ahora $fila es un arreglo. Podríamos acceder al precio de compra en $fila[1]
-                # porque los índices de los arreglos comienzan en 0
-                foreach ($fila as $numeroDeColumna => $columna) {
-                    echo "En la columna $numeroDeColumna tenemos a $columna\n";
-                }
-                # Para separar la impresión
-                echo "\n\n";
-                # Aumentar el índice
-                $numeroDeFila++;
             }
-            # Al finar cerrar el gestor
-            fclose($gestor);
-            dd('aca llegye');
+            dd('actualizado completo');
 
         }
 
-
+        dd('no entra en el if');
 
 
 
