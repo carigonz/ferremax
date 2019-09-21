@@ -146,7 +146,52 @@ class ProductController extends Controller
     }
     public function update(Request $request){
 
+        //necesito validar para mostrar errores
+
         if ($request->product){
+            $rules = [
+                'code' => ['required','unique:products','string', 'max:255'],
+                'id_supplier' => ['required','integer', 'gt:0'],
+                'price' => ['required','numeric', 'gt:0'],
+              ];
+    
+              $messages = [
+                'string' => 'El campo :attribute debe contener solo letras',
+                'max' => 'El campo :attribute debe tener como máximo :max caracteres',
+                'unique' => 'El campo :attribute debe ser único.',
+              ];
+    
+             $this->validate($data, $rules, $messages);
+
+            $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'mensaje' => ['required'],
+            ];
+    
+            $messages = [
+            'required' => 'El campo :attribute es obligatorio',
+            'string' => 'El campo :attribute debe contener solo letras',
+            'email' => "Por favor use el formato: usuario@ejemplo.com",
+    
+            ];
+    
+            $niceNames = array(
+                'name' => 'nombre',
+                'last_name' => 'apellido',
+                'email' => 'email',
+                'mensaje' => 'mensaje',
+            );
+    
+    
+    
+            $validator = Validator::make($request->all(), $rules, $messages);
+            $validator->setAttributeNames($niceNames);
+    
+            if ($validator->fails())
+            {
+                return redirect('contacto')->withErrors($validator->messages())->withInput();
+            }
 
             $data = Product::where('code', '=' , $request->code)->get();
             //dd($data[0]->id_supplier, $request->all());
@@ -170,14 +215,14 @@ class ProductController extends Controller
                 $item = Product::where('code', '=', $product['code'])->get();
                 $item = $item->toArray();
                 //dd($item);
-                
+
                 if($item){
                     //actualizar
-                    $item2 = Product::find($item[0]['id'])->update(['price' => $product['price']]);
-                    dd(Product::find($item[0]['id']));
+                    $item2 = Product::where('id','=',$item[0]['id'])->update(['price' => $product['price']]);
+                    //dd('item actualizado :D');
                 }
             }
-            dd('actualizado completo');
+            return redirect('success');
 
         }
 
