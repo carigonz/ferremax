@@ -6,6 +6,7 @@ use App\Supplier;
 use App\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -69,6 +70,7 @@ class ProductController extends Controller
 
             }
 
+
             $total_row = $data->count();
             if($total_row>0){
                 $i = 1;
@@ -78,10 +80,10 @@ class ProductController extends Controller
                     '<th scope="row">'.$i.'</th>'.
                     '<td>'.strtoupper($product->name).'</td>'.
                     '<td>'.ucfirst(strtolower($product->description)).'</td>'.
-                    '<td><a tabindex="0" href="#" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus" data-content="If you sort the ID col or use search or toggle or resize ... i will not exist any more !!!" title="descuento '.$product->discount*100
+                    '<td><a tabindex="0" href="#" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus"  title="descuento '.$product->discount*100
                     .' %" data-html="true" class="">'.$product->factoryName.'</a></td>'.
                     '<td class="d-none">'.$product->discount*100 .' %</td>'.
-                    '<td>'.$product->price.'</td>'.
+                    '<td data-toggle="popover" data-trigger="focus" title=" '. $product->updated_at .' " data-html="true">'.$product->price.'</td>'.
                     '<td class="bg-success text-center">'.round($product->price*1.6,2).'</td>'.
                     '</tr>';
                     $i++;
@@ -90,9 +92,9 @@ class ProductController extends Controller
                         '<th scope="row">'.$i.'</th>'.
                         '<td>'.strtoupper($product->name).'</td>'.
                         '<td>'.ucfirst(strtolower($product->description)).'</td>'.
-                        '<td><a tabindex="0" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus" data-content="If you sort the ID col or use search or toggle or resize ... i will not exist any more !!!" title="Descuento" data-html="true" class="">'.$product->factoryName.'</a></td>'.
+                        '<td><a tabindex="0" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus" title="Descuento '. $product->discount*100 .' %" data-html="true" class="">'.$product->factoryName.'</a></td>'.
                         '<td class="d-none">'.$product->discount*100 .' %</td>'.
-                        '<td>'.$product->price.'</td>'.
+                        '<td data-toggle="popover" data-trigger="focus" title=" '. $product->updated_at .' " data-html="true">'.$product->price.'</td>'.
                         '<td class="bg-success text-center">'.
                         round(($product->price-($product->price*$product->discount))*1.6,2)
                         .'</td>'.
@@ -148,63 +150,63 @@ class ProductController extends Controller
 
         //necesito validar para mostrar errores
 
-        if ($request->product){
+        if($request->product){
             $rules = [
-                'code' => ['required','unique:products','string', 'max:255'],
                 'id_supplier' => ['required','integer', 'gt:0'],
+                'code' => ['required','string', 'max:255'],
                 'price' => ['required','numeric', 'gt:0'],
-              ];
-    
-              $messages = [
-                'string' => 'El campo :attribute debe contener solo letras',
-                'max' => 'El campo :attribute debe tener como máximo :max caracteres',
-                'unique' => 'El campo :attribute debe ser único.',
-              ];
-    
-             $this->validate($data, $rules, $messages);
-
-            $rules = [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'mensaje' => ['required'],
             ];
-    
-            $messages = [
-            'required' => 'El campo :attribute es obligatorio',
-            'string' => 'El campo :attribute debe contener solo letras',
-            'email' => "Por favor use el formato: usuario@ejemplo.com",
-    
-            ];
-    
-            $niceNames = array(
-                'name' => 'nombre',
-                'last_name' => 'apellido',
-                'email' => 'email',
-                'mensaje' => 'mensaje',
-            );
-    
-    
-    
-            $validator = Validator::make($request->all(), $rules, $messages);
-            $validator->setAttributeNames($niceNames);
-    
-            if ($validator->fails())
-            {
-                return redirect('contacto')->withErrors($validator->messages())->withInput();
-            }
-
-            $data = Product::where('code', '=' , $request->code)->get();
-            //dd($data[0]->id_supplier, $request->all());
-                        
-            if(($data[0]->id_supplier == $request->id_supplier) && (count($data) === 1)){
-                Product::where("code", "=", $request->code)->update(['price' => $request->price]);
-                dump('todo ok');
             } else {
-                dump('te mandaste un moco');
-                //como tiro un warning de que la data esta mal???
+                $rules = [
+                    'id_supplier' => ['required','integer', 'gt:0'],
+                    'csv_file' => ['required','file'],
+                    'extension' => 'required|in:csv',
+                ];
             }
-            
-        } 
+
+          $messages = [
+            'string' => 'El campo :attribute debe contener sólo letras',
+            'max' => 'El campo :attribute debe tener como máximo :max caracteres',
+            'required' => 'El campo :attribute es obligatorio.',
+            'unique' => 'El campo :attribute debe ser único.',
+            'numeric' => 'Ingrese un valor numérico.',
+            'integer' => 'Ingrese un número entero.',
+            'in' => 'El archivo debe ser sólo extensión .csv.',
+            'file' => 'Hubo un error en la subida del archivo.',
+            'gt' => 'El campo :attribute no puede estar vacío.'
+          ];
+
+        $niceNames = array(
+            'id_supplier' => 'proveedor',
+            'csv_file' => 'archivo',
+            'price' => 'precio',
+            'code' => 'código',
+        );
+
+
+        $data =$request->all();
+        if ($request->hasFile('csv_file')){
+            $data += ['extension' => strtolower($data['csv_file']->getClientOriginalExtension())];
+        }
+
+        $validator = Validator::make($data, $rules, $messages);
+        $validator->setAttributeNames($niceNames);
+        $errors = $validator->errors();
+
+        //dd($data);
+
+        if ($validator->fails())
+        {
+            //dd($validator);
+            if (array_key_exists('list',$data)){
+                return redirect('update')->withErrors($validator->messages(),'file')->withInput();
+            } else {
+            //dd($validator->messages());
+                return redirect('update')->withErrors($validator->messages(),'product')->withInput();
+            }
+        }
+
+         
         if($request->hasFile('csv_file')) {
 
             $path = $request->file('csv_file')->store('storage/files');
@@ -224,6 +226,23 @@ class ProductController extends Controller
             }
             return redirect('success');
 
+        } else {
+
+            $data = Product::where('code', '=' , $request->code)->get();
+            //dd($data[0]->id_supplier, $request->all());
+
+            //dd($data);
+                        
+            if(($data[0]->id_supplier == $request->id_supplier) && (count($data) === 1)){
+                Product::where("code", "=", $request->code)->update(['price' => $request->price]);
+                dump('todo ok');
+            } else {
+
+                //como tiro un warning de que la data esta mal???
+                $errors = ['id_supplier' => 'El código del producto no coincide con el proveedor seleccionado en la base de datos.'];
+                return redirect('update')->withErrors($errors, 'product')->withInput();
+            }
+            
         }
 
         dd('no entra en el if');
