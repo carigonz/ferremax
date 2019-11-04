@@ -48,6 +48,7 @@ class ProductController extends Controller
         $output = 0;
         $suppliers = Supplier::all();
         $total_row = 0;
+        $ya = 'test';
         if($request->ajax()){
             $query = $request->get('query');
             //dd($query);
@@ -75,7 +76,7 @@ class ProductController extends Controller
             if($total_row>0){
                 $i = 1;
                 foreach ($data as $key => $product) {
-                    if ($product->price){
+                    if ($product->discount === 0){
                     $output.='<tr>'.
                     '<th scope="row">'.$i.'</th>'.
                     '<td>'.strtoupper($product->name).'</td>'.
@@ -83,7 +84,7 @@ class ProductController extends Controller
                     '<td><a tabindex="0" href="#" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus"  title="descuento '.$product->discount*100
                     .' %" data-html="true" class="">'.$product->factoryName.'</a></td>'.
                     '<td class="d-none">'.$product->discount*100 .' %</td>'.
-                    '<td data-toggle="popover" data-trigger="focus" title=" '. $product->updated_at .' " data-html="true">'.$product->price.'</td>'.
+                    '<td data-toggle="popover" data-trigger="focus" title=" '. $product->updated_at .'ss " data-html="true">'.$product->price.'</td>'.
                     '<td class="bg-success text-center">'.round($product->price*1.6,2).'</td>'.
                     '</tr>';
                     $i++;
@@ -94,7 +95,7 @@ class ProductController extends Controller
                         '<td>'.ucfirst(strtolower($product->description)).'</td>'.
                         '<td><a tabindex="0" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus" title="Descuento '. $product->discount*100 .' %" data-html="true" class="">'.$product->factoryName.'</a></td>'.
                         '<td class="d-none">'.$product->discount*100 .' %</td>'.
-                        '<td data-toggle="popover" data-trigger="focus" title=" '. $product->updated_at .' " data-html="true">'.$product->price.'</td>'.
+                        '<td data-toggle="popover" data-trigger="focus" title=" ss'. $product->updated_at .' " data-html="true">'.$product->price .'</td>'.
                         '<td class="bg-success text-center">'.
                         round(($product->price-($product->price*$product->discount))*1.6,2)
                         .'</td>'.

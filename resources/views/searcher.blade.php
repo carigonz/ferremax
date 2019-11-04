@@ -86,7 +86,7 @@
 			}).done( function(data){
 					$('tbody').html(data.table_data);
 					$('#total_records').text(data.total_data);
-					//console.log(data);
+					//console.log(data.table_data);
 				}
 			).fail( function(data){
 				console.log(data.responseJSON.message);
