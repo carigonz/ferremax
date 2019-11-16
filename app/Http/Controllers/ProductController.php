@@ -68,7 +68,6 @@ class ProductController extends Controller
                 ->orderBy('name')
                 ->orderBy('description')
                 ->get();
-
             }
 
 
@@ -82,7 +81,7 @@ class ProductController extends Controller
                     '<td>'.strtoupper($product->name).'</td>'.
                     '<td>'.ucfirst(strtolower($product->description)).'</td>'.
                     '<td><a tabindex="0" href="#" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus"  title="descuento '.$product->discount*100
-                    .' %" data-html="true" class="">'.$product->factoryName.'</a></td>'.
+                    .' %" data-html="true" onClick="searchFilter(' . $product->factoryName . ')" class="">'.$product->factoryName.'</a></td>'.
                     '<td class="d-none">'.$product->discount*100 .' %</td>'.
                     '<td data-toggle="popover" data-trigger="focus" title=" '. $product->updated_at .'ss " data-html="true">'.$product->price.'</td>'.
                     '<td class="bg-success text-center">'.round($product->price*1.6,2).'</td>'.
@@ -93,7 +92,7 @@ class ProductController extends Controller
                         '<th scope="row">'.$i.'</th>'.
                         '<td>'.strtoupper($product->name).'</td>'.
                         '<td>'.ucfirst(strtolower($product->description)).'</td>'.
-                        '<td><a tabindex="0" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus" title="Descuento '. $product->discount*100 .' %" data-html="true" class="">'.$product->factoryName.'</a></td>'.
+                        '<td><a tabindex="0" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus" title="Descuento '. $product->discount*100 .' %" onClick="searchFilter(' . $product->factoryName . ')" data-html="true" class="">'.$product->factoryName.'</a></td>'.
                         '<td class="d-none">'.$product->discount*100 .' %</td>'.
                         '<td data-toggle="popover" data-trigger="focus" title=" ss'. $product->updated_at .' " data-html="true">'.$product->price .'</td>'.
                         '<td class="bg-success text-center">'.
@@ -110,12 +109,13 @@ class ProductController extends Controller
                     <tr>
                     ';
                 }
+            $encoded_output = mb_convert_encoding($output, 'UTF-8', 'UTF-8');
             $chan = array(
-                'table_data' => $output,
+                'table_data' => $encoded_output,
                 'total_data' => $total_row,
                 'suppliers_data' => $suppliers
             );
-            //console.log($data);
+            
             $finish = json_encode($chan);
             return $finish;
         }
@@ -123,7 +123,7 @@ class ProductController extends Controller
             $query = $Request->get('query');
             //($query);
         }
-    }
+     }
 
     public function csvToArray($filename = '', $delimiter = ';')
     {

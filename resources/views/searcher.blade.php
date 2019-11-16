@@ -58,80 +58,85 @@
 								</tr>
 							</thead>
 							<tbody>
-
 								{{-- productController --}}
 							</tbody>
 						</table>
-				</div>
-			</section>
-</main>
-
-<script>
-	
-
-	const filterButtons = ['pvc','ppn','bronce','polietileno','epoxi','galvanizado','sigas','redeco','duratop'];
-
-	function fetchData(query = '')
-		{
-			$.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-			});
-			$.ajax({
-				url:'{{ route('search.action') }}',
-				method: 'GET',
-				data: {query:query},
-				dataType: 'json'
-			}).done( function(data){
-					$('tbody').html(data.table_data);
-					$('#total_records').text(data.total_data);
-					//console.log(data.table_data);
+					</div>
+				</section>
+			</main>
+			
+			<script>
+				
+				
+				const filterButtons = ['pvc','ppn','bronce','polietileno','epoxi','galvanizado','sigas','redeco','duratop'];
+				
+				function fetchData(query = '')
+				{
+					$.ajaxSetup({
+						headers: {
+							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+							
+						}
+					});
+					$.ajax({
+						url:'{{ route('search.action') }}',
+						method: 'GET',
+						data: { query },
+						dataType: 'json',
+  						contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
+						data: $.param({
+							action: "selectTargetsWithOffset"
+						}),
+					}).done( function(data){
+						console.log(data, `=====success response=====`);
+						$('tbody').html(data.table_data);
+						$('#total_records').text(data.total_data);
+					}).fail( function(data){
+						console.log(data, `=======error=======`);
+					});
 				}
-			).fail( function(data){
-				console.log(data.responseJSON.message);
-				console.log('pasaron cosas');
-			});
-		}
 
-	function searchSupplier(id){
-		//const totalData = fetchData().filter( product => product.id_supplier === id);
-		$('tbody').filter('a').css( "background-color", "red" );
-	}
-	
-	const searchFilter = (filter) => fetchData(filter);
-	
-	$(document).ready(function () {
-		fetchData();
-		$('#query').keyup( function(){
-			let query = $(this).val();
-			fetchData(query);
-			//console.log(query);
-		});
-		$(function () {
-			$('[data-toggle="popover"]').popover()
-		});
-				$('.popover-dismiss').popover({
-			trigger: 'focus'
-		});
-		$(function () {
-				$('[data-toggle="tooltip"]').tooltip();
-				$('[data-toggle="popover"]').popover();  
-				$('#table-container').on('all.bs.table', function (e, name, args) {
+				
+				function searchSupplier(id){
+					//const totalData = fetchData().filter( product => product.id_supplier === id);
+					$('tbody').filter('a').css( "background-color", "red" );
+				}
+				
+				const searchFilter = (filter) => fetchData(filter);
+				
+				$(document).ready(function () {
+					fetchData();
+					$('#query').keyup( function(){
+						let query = $(this).val();
+						fetchData(query);
+						//console.log(query);
+					});
+					$(function () {
+						$('[data-toggle="popover"]').popover()
+					});
+					$('.popover-dismiss').popover({
+						trigger: 'focus'
+					});
+					$(function () {
 						$('[data-toggle="tooltip"]').tooltip();
 						$('[data-toggle="popover"]').popover();  
+						$('#table-container').on('all.bs.table', function (e, name, args) {
+							$('[data-toggle="tooltip"]').tooltip();
+							$('[data-toggle="popover"]').popover();  
+						});
+					});
+				
+					
+					//button filters
+					let rowFilter = '';
+					const buttons = filterButtons.map( filter => {
+						rowFilter += `
+						<li><a href='#total_records' onClick="searchFilter('` + filter + `')" id="` + filter + `" class="btn btn-success">` + filter + `</a></li>
+						`
+					});
+					
+					$('.categories-filter .categories').append(rowFilter);
 				});
-		});
+				</script>
 
-		//button filters
-		let rowFilter = '';
-		const buttons = filterButtons.map( filter => {
-			rowFilter += `
-				<li><a href='#total_records' onClick="searchFilter('`+filter+`')" id="`+filter+`" class="btn btn-success">`+filter+`</a></li>
-			`
-		});
-
-		$('.categories-filter .categories').append(rowFilter);
-	});
-</script>
 @endsection
