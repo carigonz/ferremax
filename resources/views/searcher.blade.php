@@ -58,123 +58,82 @@
 								</tr>
 							</thead>
 							<tbody>
-
+								{{-- productController --}}
 							</tbody>
 						</table>
-				</div>
-			</section>
-</main>
-
-<script>
-	
-
-	const filterButtons = ['pvc','ppn','bronce','polietileno','epoxi','galvanizado','sigas','redeco','duratop'];
-
-	function fetchData(query = '')
-		{
-			$.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-			});
-			$.ajax({
-				url:'{{ route('search.action') }}',
-				method: 'GET',
-				data: {query:query},
-				dataType: 'json'
-			}).done( function(data){
-					//$('tbody').html(data.table_data);
-					//$('#total_records').text(data.total_data);
-					console.log(data);
+					</div>
+				</section>
+			</main>
+			
+			<script>
+				
+				
+				const filterButtons = ['pvc','ppn','bronce','polietileno','epoxi','galvanizado','sigas','redeco','duratop'];
+				
+				function fetchData(query = '')
+				{
+					$.ajaxSetup({
+						headers: {
+							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+							
+						}
+					});
+					$.ajax({
+						url:'{{ route('search.action') }}',
+						method: 'GET',
+						data: { query },
+						dataType: 'json',
+  						contentType : 'application/x-www-form-urlencoded; charset=UTF-8'
+					}).done( function(data){
+						console.log(data, `=====success response=====`);
+						$('tbody').html(data.table_data);
+						$('#total_records').text(data.total_data);
+					}).fail( function(data){
+						console.log(data, `=======error=======`);
+					});
 				}
-			).fail( function(data){
-				console.log(data.responseJSON.message);
-				console.log('pasaron cosas');
-			});
-		}
 
-	function searchSupplier(id){
-		//const totalData = fetchData().filter( product => product.id_supplier === id);
-		$('tbody').filter('a').css( "background-color", "red" );
-	}
-	
-	const searchFilter = (filter) => fetchData(filter);
-	
-	$(document).ready(function () {
-		fetchData();
-		$('#query').keyup( function(){
-			let query = $(this).val();
-			fetchData(query);
-			//console.log(query);
-		});
-		$(function () {
-			$('[data-toggle="popover"]').popover()
-		});
-				$('.popover-dismiss').popover({
-			trigger: 'focus'
-		});
-		$(function () {
-				$('[data-toggle="tooltip"]').tooltip();
-				$('[data-toggle="popover"]').popover();  
-				$('#table-container').on('all.bs.table', function (e, name, args) {
+				
+				function searchSupplier(id){
+					//const totalData = fetchData().filter( product => product.id_supplier === id);
+					$('tbody').filter('a').css( "background-color", "red" );
+				}
+				
+				const searchFilter = (filter) => fetchData(filter);
+				
+				$(document).ready(function () {
+					fetchData();
+					$('#query').keyup( function(){
+						let query = $(this).val();
+						fetchData(query);
+						//console.log(query);
+					});
+					$(function () {
+						$('[data-toggle="popover"]').popover()
+					});
+					$('.popover-dismiss').popover({
+						trigger: 'focus'
+					});
+					$(function () {
 						$('[data-toggle="tooltip"]').tooltip();
 						$('[data-toggle="popover"]').popover();  
+						$('#table-container').on('all.bs.table', function (e, name, args) {
+							$('[data-toggle="tooltip"]').tooltip();
+							$('[data-toggle="popover"]').popover();  
+						});
+					});
+				
+					
+					//button filters
+					let rowFilter = '';
+					const buttons = filterButtons.map( filter => {
+						rowFilter += `
+						<li><a href='#total_records' onClick="searchFilter('` + filter + `')" id="` + filter + `" class="btn btn-success">` + filter + `</a></li>
+						`
+					});
+					
+					$('.categories-filter .categories').append(rowFilter);
 				});
-		});
+				</script>
 
-		//button filters
-		let rowFilter = '';
-		const buttons = filterButtons.map( filter => {
-			rowFilter += `
-				<li><a href='#total_records' onClick="searchFilter('`+filter+`')" id="`+filter+`" class="btn btn-success">`+filter+`</a></li>
-			`
-		});
-
-		$('.categories-filter .categories').append(rowFilter);
-	});
-
-	$(document).ready(function () {
-		$('tbody').html(data.table_data);
-		$('#total_records').text(data.total_data);
-		//$total_row = $data->count();
-		console.log(data);
-            // if($total_row>0){
-            //     $i = 1;
-            //     foreach ($data as $key => $product) {
-            //         if ($product->discount === 0){
-            //         $output.='<tr>'.
-            //         '<th scope="row">'.$i.'</th>'.
-            //         '<td>'.strtoupper($product->name).'</td>'.
-            //         '<td>'.ucfirst(strtolower($product->description)).'</td>'.
-            //         '<td><a tabindex="0" href="#" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus"  title="descuento '.$product->discount*100
-            //         .' %" data-html="true" class="">'.$product->factoryName.'</a></td>'.
-            //         '<td class="d-none">'.$product->discount*100 .' %</td>'.
-            //         '<td data-toggle="popover" data-trigger="focus" title=" '. $product->updated_at .'ss " data-html="true">'.$product->price.'</td>'.
-            //         '<td class="bg-success text-center">'.round($product->price*1.6,2).'</td>'.
-            //         '</tr>';
-            //         $i++;
-            //         } else {
-            //             $output.='<tr>'.
-            //             '<th scope="row">'.$i.'</th>'.
-            //             '<td>'.strtoupper($product->name).'</td>'.
-            //             '<td>'.ucfirst(strtolower($product->description)).'</td>'.
-            //             '<td><a tabindex="0" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus" title="Descuento '. $product->discount*100 .' %" data-html="true" class="">'.$product->factoryName.'</a></td>'.
-            //             '<td class="d-none">'.$product->discount*100 .' %</td>'.
-            //             '<td data-toggle="popover" data-trigger="focus" title=" ss'. $product->updated_at .' " data-html="true">'.$product->price .'</td>'.
-            //             '<td class="bg-success text-center">'.
-            //             round(($product->price-($product->price*$product->discount))*1.6,2)
-            //             .'</td>'.
-            //             '</tr>';
-            //             $i++;
-            //         }
-            //     }
-            // } else{
-            //         $output .= '
-            //         <tr>
-            //             <td>No data found</td>
-            //         <tr>
-            //         ';
-            //     }
-	});
-</script>
 @endsection
