@@ -59,7 +59,6 @@
 							</thead>
 							<tbody>
 
-								{{-- productController --}}
 							</tbody>
 						</table>
 				</div>
@@ -84,9 +83,9 @@
 				data: {query:query},
 				dataType: 'json'
 			}).done( function(data){
-					$('tbody').html(data.table_data);
-					$('#total_records').text(data.total_data);
-					//console.log(data.table_data);
+					//$('tbody').html(data.table_data);
+					//$('#total_records').text(data.total_data);
+					console.log(data);
 				}
 			).fail( function(data){
 				console.log(data.responseJSON.message);
@@ -132,6 +131,50 @@
 		});
 
 		$('.categories-filter .categories').append(rowFilter);
+	});
+
+	$(document).ready(function () {
+		$('tbody').html(data.table_data);
+		$('#total_records').text(data.total_data);
+		//$total_row = $data->count();
+		console.log(data);
+            // if($total_row>0){
+            //     $i = 1;
+            //     foreach ($data as $key => $product) {
+            //         if ($product->discount === 0){
+            //         $output.='<tr>'.
+            //         '<th scope="row">'.$i.'</th>'.
+            //         '<td>'.strtoupper($product->name).'</td>'.
+            //         '<td>'.ucfirst(strtolower($product->description)).'</td>'.
+            //         '<td><a tabindex="0" href="#" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus"  title="descuento '.$product->discount*100
+            //         .' %" data-html="true" class="">'.$product->factoryName.'</a></td>'.
+            //         '<td class="d-none">'.$product->discount*100 .' %</td>'.
+            //         '<td data-toggle="popover" data-trigger="focus" title=" '. $product->updated_at .'ss " data-html="true">'.$product->price.'</td>'.
+            //         '<td class="bg-success text-center">'.round($product->price*1.6,2).'</td>'.
+            //         '</tr>';
+            //         $i++;
+            //         } else {
+            //             $output.='<tr>'.
+            //             '<th scope="row">'.$i.'</th>'.
+            //             '<td>'.strtoupper($product->name).'</td>'.
+            //             '<td>'.ucfirst(strtolower($product->description)).'</td>'.
+            //             '<td><a tabindex="0" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus" title="Descuento '. $product->discount*100 .' %" data-html="true" class="">'.$product->factoryName.'</a></td>'.
+            //             '<td class="d-none">'.$product->discount*100 .' %</td>'.
+            //             '<td data-toggle="popover" data-trigger="focus" title=" ss'. $product->updated_at .' " data-html="true">'.$product->price .'</td>'.
+            //             '<td class="bg-success text-center">'.
+            //             round(($product->price-($product->price*$product->discount))*1.6,2)
+            //             .'</td>'.
+            //             '</tr>';
+            //             $i++;
+            //         }
+            //     }
+            // } else{
+            //         $output .= '
+            //         <tr>
+            //             <td>No data found</td>
+            //         <tr>
+            //         ';
+            //     }
 	});
 </script>
 @endsection
