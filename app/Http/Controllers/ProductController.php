@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Supplier;
-use App\Product;
+use App\Models\Supplier;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -20,7 +20,16 @@ class ProductController extends Controller
     } 
     function search(){
         $suppliers = Supplier::getNames();
-        return view('searcher')->with('suppliers',$suppliers);
+
+        /** @var Collection $proudcts */
+        $products =  DB::table('products')
+            ->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
+            ->orderBy('name')
+            ->orderBy('description')
+            ->get();
+
+        return view('searcher')->with('suppliers',$suppliers)->with('products',$products);
+
     } 
     public function create(Request $data)
     {
@@ -120,7 +129,7 @@ class ProductController extends Controller
             return $finish;
         }
         else {
-            $query = $Request->get('query');
+            $query = $request->get('query');
             //($query);
         }
      }

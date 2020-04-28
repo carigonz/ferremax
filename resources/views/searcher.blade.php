@@ -83,10 +83,7 @@
 						method: 'GET',
 						data: { query },
 						dataType: 'json',
-  						contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
-						data: $.param({
-							action: "selectTargetsWithOffset"
-						}),
+  						contentType : 'application/x-www-form-urlencoded; charset=UTF-8'
 					}).done( function(data){
 						console.log(data, `=====success response=====`);
 						$('tbody').html(data.table_data);
