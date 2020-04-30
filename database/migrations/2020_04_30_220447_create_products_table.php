@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Products extends Migration
+class CreateProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,16 +15,17 @@ class Products extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code')->unique();
+            $table->string('code');
             $table->string('name');
-            $table->unsignedDecimal('price', 8, 2);
-            $table->bigInteger('id_supplier')->unsigned()->index();
-            $table->foreign('id_supplier')->references('id')->on('suppliers');
+            $table->unsignedBigInteger('list_id');
+            $table->unsignedBigInteger('tariff_id');
             $table->text('description')->nullable();
             $table->unsignedInteger('stock')->nullable();
-            $table->string('avatar')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('tariff_id')->references('id')->on('tariffs')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('list_id')->references('id')->on('lists')->onUpdate('cascade')->onDelete('cascade');
         });
     }
     /**
@@ -34,6 +35,11 @@ class Products extends Migration
      */
     public function down()
     {
+        Schema::table('products', function($table) {
+            $table->dropForeign('products_tariff_id_foreign');
+            $table->dropForeign('products_list_id_foreign');
+        });
         Schema::drop('products');
     }
+
 }
