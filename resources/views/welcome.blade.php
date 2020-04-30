@@ -19,7 +19,7 @@
     </main>
 @endsection
 
-@section('js')
+@section('inline-scripts')
     <script>
         $('.target-search').addClass('load');
         $('.main-container-welcome').addClass('load');

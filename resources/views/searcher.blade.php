@@ -6,9 +6,6 @@
 		
 @extends('layouts/master')
 
-{{-- @section('js')
-<script src="{{ asset('js/liveSearch.js') }}"></script>		
-@endsection --}}
 @section('main')
 <main class="body-container-searcher flex-column">
 		<div class="button-item">
