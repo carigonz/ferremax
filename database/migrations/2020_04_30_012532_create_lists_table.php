@@ -13,7 +13,7 @@ class CreateListsTable extends Migration
      */
     public function up()
     {
-        Schema::create('lists', function (Blueprint $table) {
+        Schema::create('catalogs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('description', 70)->nullable();
             $table->string('name', 70)->nullable();
@@ -23,7 +23,7 @@ class CreateListsTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::table('lists', function($table) {
+        Schema::table('catalogs', function($table) {
             $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
         });
     }
@@ -35,9 +35,9 @@ class CreateListsTable extends Migration
      */
     public function down()
     {
-        Schema::table('lists', function($table) {
-            $table->dropForeign('lists_provider_id_foreign');
+        Schema::table('catalogs', function($table) {
+            $table->dropForeign('catalogs_provider_id_foreign');
         });
-        Schema::dropIfExists('lists');
+        Schema::dropIfExists('catalogs');
     }
 }

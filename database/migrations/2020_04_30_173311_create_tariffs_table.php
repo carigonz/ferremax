@@ -17,7 +17,6 @@ class CreateTariffsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedDecimal('amount', 5, 3);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

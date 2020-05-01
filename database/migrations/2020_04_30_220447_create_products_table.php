@@ -17,7 +17,7 @@ class CreateProductsTable extends Migration
             $table->bigIncrements('id');
             $table->string('code');
             $table->string('name');
-            $table->unsignedBigInteger('list_id');
+            $table->unsignedBigInteger('catalog_id');
             $table->unsignedBigInteger('tariff_id');
             $table->text('description')->nullable();
             $table->unsignedInteger('stock')->nullable();
@@ -25,7 +25,13 @@ class CreateProductsTable extends Migration
             $table->softDeletes();
 
             $table->foreign('tariff_id')->references('id')->on('tariffs')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('list_id')->references('id')->on('lists')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('catalog_id')->references('id')->on('catalogs')->onUpdate('cascade')->onDelete('cascade');
+        });
+
+
+        Schema::table('tariffs', function($table) {
+            $table->unsignedBigInteger('product_id')->after('id');
+            $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
         });
     }
     /**
@@ -35,9 +41,15 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
+
+        Schema::table('tariffs', function($table) {
+            $table->dropForeign('tariffs_product_id_foreign');
+            $table->dropColumn('product_id');
+        });
+
         Schema::table('products', function($table) {
             $table->dropForeign('products_tariff_id_foreign');
-            $table->dropForeign('products_list_id_foreign');
+            $table->dropForeign('products_catalog_id_foreign');
         });
         Schema::drop('products');
     }
