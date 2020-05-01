@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class product 
  * 
- * @property Tariff $tariff_id
  * @property string $code
  * @property string $name
  * @property Tariff $tariff_id
