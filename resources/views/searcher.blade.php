@@ -24,12 +24,12 @@
 			</div>
 			<section id="filters" class="d-flex flex-wrap justify-content-around ">
 				<div class="suppliers d-none">
-					<ul class="d-flex justify-content-around flex-wrap align-self-center flex-column">
+					{{-- <ul class="d-flex justify-content-around flex-wrap align-self-center flex-column">
 						@for ($i = 0; $i < count($suppliers); $i++)
 						<li><a href='#total_records' onClick="searchSupplier({{$i}})" id="{{$i}}">{{$suppliers[$i]}}</a></li>
 							
 						@endfor
-					</ul>
+					</ul> --}}
 				</div>
 				<div class="categories-filter d-flex flex-wrap ">
 					<ul class="d-flex justify-content-around flex-wrap categories align-self-center">

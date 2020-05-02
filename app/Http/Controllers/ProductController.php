@@ -15,20 +15,24 @@ class ProductController extends Controller
         return view('newProduct')->with('suppliers',$suppliers);
     } 
     function viewUpdate(){
-        $suppliers = Supplier::getNames();
-        return view('update')->with('suppliers',$suppliers);
+        //$suppliers = Supplier::getNames();
+        return view('update');
     } 
-    function search(){
-        $suppliers = Supplier::getNames();
+    function configuration(){
+        //$suppliers = Supplier::getNames();
+        return view('configuration/index');
+    } 
+    public function search(){
+        //$suppliers = Supplier::getNames();
 
         /** @var Collection $proudcts */
         $products =  DB::table('products')
-            ->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
+            //->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
             ->orderBy('name')
             ->orderBy('description')
             ->get();
 
-        return view('searcher')->with('suppliers',$suppliers)->with('products',$products);
+        return view('searcher');
 
     } 
     public function create(Request $data)

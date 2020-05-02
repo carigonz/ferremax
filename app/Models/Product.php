@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property Tariff $tariff_id
  * @property Catalog $catalog_id
- * @property Section $section_id
+ * @property Section|null $section_id
  * @property string $description
  * @property int $stock
  */
@@ -25,7 +25,7 @@ class Product extends Model
         'name',
         'section_id',
         'tariff_id',
-        'catalog_ud',
+        'catalog_id',
         'description',
         'stock'
     ];

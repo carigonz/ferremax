@@ -39,3 +39,25 @@ Route::get('/home', 'HomeController@index')->name('home');
 //Route::get('/', 'ImportController@getImport')->name('import');
 Route::post('/import_parse', 'ImportController@parseImport')->name('import_parse');
 Route::post('/import_process', 'ImportController@processImport')->name('import_process');
+
+
+Route::group(['middleware' => 'auth'], function () {
+    // User needs to be authenticated to enter here.
+    Route::get('/search', 'ProductController@search')->name('search');
+    
+    Route::get('/configuration', 'ProductController@configuration')->name('configuration');
+    Route::get('/search/action', 'ProductController@action')->name('search.action');
+    
+    Route::group(['prefix' => 'providers'], function () {
+        Route::get('/create', 'ProviderController@create')->name('providers.create');
+    });
+    Route::get('/update', 'ProductController@viewUpdate')->name('update');
+    
+    Route::post('update', 'ProductController@update');
+    
+    Route::get('/update/asd', 'ProductController@update')->name('update.product');
+    
+    Route::get('user/profile', function () {
+        // Uses Auth Middleware
+    });
+});

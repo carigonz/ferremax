@@ -29,7 +29,8 @@
 		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
 		crossorigin="anonymous"></script>
 
-    <title>@yield('title')</title>
+	<title>@yield('title')</title>
+	@yield('inline-css')
   </head>
   <body class="container-fluid">
     <header class="header-container">
@@ -45,13 +46,13 @@
 							@auth
 							<li class="nav-item dropdown">
 								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Presupuesto
+									Menu
 								</a>
 								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item" href="#">Nuevo Presupuesto</a>
 									<a class="dropdown-item" href="#">Historial</a>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="#">Something else here</a>
+									<a class="dropdown-item" href="#">Configuración</a>
 									<a class="dropdown-item" href="{{ route('logout') }}"
 									onclick="event.preventDefault();
 																document.getElementById('logout-form').submit();">

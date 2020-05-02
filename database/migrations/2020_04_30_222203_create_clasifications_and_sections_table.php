@@ -36,7 +36,7 @@ class CreateClasificationsAndSectionsTable extends Migration
         });
 
         Schema::table('products', function($table) {
-            $table->unsignedBigInteger('section_id')->after('tariff_id');
+            $table->unsignedBigInteger('section_id')->after('tariff_id')->nullable();
             $table->foreign('section_id')->references('id')->on('sections')->onUpdate('cascade')->onDelete('cascade');
         });
     }
