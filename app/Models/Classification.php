@@ -17,9 +17,9 @@ class Classification extends Model
         'type'
     ];
 
-    protected $hidden = ['id'];
+    protected $hidden = ['id', 'categories'];
 
-    protected $with = ['categories'];
+    protected $with = [];
 
     public function categories()
     {

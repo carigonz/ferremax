@@ -19,12 +19,13 @@ class Category extends Model
 {
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'classification_id'
     ];
 
-    protected $hidden = ['id'];
+    protected $hidden = ['id', 'classification', 'sections'];
 
-    protected $with = ['sections', 'classification'];
+    protected $with = [];
 
     public function discounts()
     {

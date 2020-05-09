@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string|null $description
  * @property string|null $phone
- * @property ProviderType $provider_type
+ * @property ProviderType $provider_type_id
  */
 class Provider extends Model
 {
@@ -22,20 +22,35 @@ class Provider extends Model
         'name',
         'description',
         'phone',
-        'provider_type'
+        'provider_type_id'
     ];
 
     protected $hidden = ['id'];
 
-    protected $with = ['provider_types'];
+    protected $with = ['providerType'];
 
     public function providerType()
     {
-        return $this->belongsTo(ProviderType::class, 'provider_type');
+        return $this->belongsTo(ProviderType::class, 'provider_type_id');
     }
 
     public function discounts()
     {
         return $this->morphMany(TariffDiscount::class, 'discountable');
+    }
+
+    public function scopeOfType($query, $type)
+    {
+        return $query->where('type', 'LIKE', '%'. $type . '%');
+    }
+
+    public function scopeOfCorredor($query)
+    {
+        return $query->where('type', '=', 'Corredor');
+    }
+
+    public function scopeOfDistribuidora($query)
+    {
+        return $query->where('type', '=', 'Distribuidora');
     }
 }

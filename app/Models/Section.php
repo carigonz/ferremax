@@ -22,9 +22,9 @@ class Section extends Model
         'description'
     ];
 
-    protected $hidden = ['id'];
+    protected $hidden = ['id','products', 'category'];
 
-    protected $with = ['products', 'category'];
+    protected $with = [];
 
     public function discounts()
     {
