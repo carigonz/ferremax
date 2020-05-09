@@ -30,9 +30,9 @@ class Product extends Model
         'stock'
     ];
 
-    protected $hidden = ['id'];
+    protected $hidden = ['id','tariffs', 'sections'];
 
-    protected $with = ['tariffs', 'sections'];
+    protected $with = [];
 
     public function discounts()
     {
