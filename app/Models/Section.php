@@ -19,7 +19,8 @@ class Section extends Model
 {
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'category_id'
     ];
 
     protected $hidden = ['id','products', 'category'];

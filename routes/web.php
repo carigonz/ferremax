@@ -48,6 +48,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/classifications', 'ClassificationController')->name('*','classifications');
     // categories
     Route::resource('/categories', 'CategoryController')->name('*','categories');
+    // sections
+    Route::resource('/sections', 'SectionController')->name('*','sections');
 
     Route::get('/update', 'ProductController@viewUpdate')->name('update');
     
