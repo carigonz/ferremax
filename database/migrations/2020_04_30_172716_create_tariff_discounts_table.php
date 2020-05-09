@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Suppliers extends Migration
+class CreateTariffDiscountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class Suppliers extends Migration
      */
     public function up()
     {
-        Schema::create('suppliers', function (Blueprint $table) {
+        Schema::create('tariff_discounts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('factoryName');
-            $table->decimal('discount', 5, 4)->nullable();
-            $table->string('rubro');
+            $table->morphs('discountable');
+            $table->unsignedDecimal('amount', 5, 3);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +29,6 @@ class Suppliers extends Migration
      */
     public function down()
     {
-        Schema::drop('suppliers');
+        Schema::dropIfExists('tariff_discounts');
     }
 }

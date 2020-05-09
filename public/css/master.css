@@ -21,7 +21,6 @@ a {
 
 body {
     margin: 0%;
-    height: 100%;
     font-family: 'Nunito Sans', 'Varela Round', 'Courier New', Courier,
         monospace;
     margin: 0;
@@ -42,7 +41,18 @@ body {
 /* master section */
 .container-fluid {
     width: 100vw;
-    padding-left: 0;
+    padding: 0;
+}
+.main-section {
+    background-image: linear-gradient(
+        to bottom,
+        #b675e7,
+        #af6ae8,
+        #a85fe9,
+        #a054ea,
+        #9749eb
+    );
+    min-height: 74vh;
 }
 .footer-main {
     background: var(--main-bg-light);
@@ -53,4 +63,9 @@ body {
     padding: 5px 5px;
     font-size: 1.3rem;
     color: #000000;
+}
+#navbar {
+    position: fixed;
+    width: 100vw;
+    z-index: 3333;
 }

@@ -33,9 +33,9 @@
 							<label for="id_supplier">Proveedor: </label>
 								<select name="id_supplier" class="custom-select" id="id_supplier">
 									<option selected value="0">Elija una opción</option>
-										@for ($i = 0; $i < count($suppliers) ; $i++)
+										{{-- @for ($i = 0; $i < count($suppliers) ; $i++)
 											<option value="{{$i + 1}}">{{$suppliers[$i]}}</option>
-										@endfor
+										@endfor --}}
 								</optgroup>
 							</select>
 					</div>
@@ -70,9 +70,9 @@
 							<label for="id_supplier">Proveedor: </label>
 								<select name="id_supplier" class="custom-select" id="id_supplier">
 									<option selected value="0">Elija una opción</option>
-										@for ($i = 0; $i < count($suppliers) ; $i++)
+										{{-- @for ($i = 0; $i < count($suppliers) ; $i++)
 											<option value="{{$i + 1}}">{{$suppliers[$i]}}</option>
-										@endfor
+										@endfor --}}
 								</optgroup>
 							</select>
 					</div>
