@@ -2,25 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Classification;
 use App\Models\Supplier;
 use App\Models\Product;
+use App\Repositories\ClassificationRepository;
+use App\Repositories\ProviderRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+    /** @var ProviderRepository $providerRepository */
+    protected $providerRepository;
+
+    public function __construct(ProviderRepository $providerRepository, ClassificationRepository $classificationRepository)
+    {
+        $this->providerRepository = $providerRepository;
+        $this->classificationRepository = $classificationRepository;
+    }
     function newProduct(){
-        $suppliers = Supplier::getNames();
-        return view('newProduct')->with('suppliers',$suppliers);
+       //$suppliers = Supplier::getNames();
+        return view('newProduct');//->with('suppliers',$suppliers);
     } 
     function viewUpdate(){
         //$suppliers = Supplier::getNames();
         return view('update');
     } 
     function configuration(){
-        //$suppliers = Supplier::getNames();
-        return view('configuration/index');
+
+        return view('configuration.index');
     } 
     public function search(){
         //$suppliers = Supplier::getNames();

@@ -1,6 +1,6 @@
 @extends('layouts/master')
 
-@section('title', 'Crear Provedor')
+@section('title', 'Actualizar Provedor')
     
 @section('inline-css')
 <style>
@@ -63,7 +63,7 @@
 
 @section('main')
 <section class="main-container-update flex-column container-fluid d-flex justify-content-around align-items-center">
-    <h4><a href="{{route('configuration')}}">Configuración</a> / <strong>Nuevo proveedor</strong></h4>
+    <h4><a href="{{route('configuration')}}">Configuración</a> / <strong>Editar proveedor</strong></h4>
 <div class="card-deck flex-column">
     <div class="header-update">
     </div>
@@ -79,14 +79,14 @@
                     </ul>
                 </div>
             @endif
-                {!! Form::open(array('route' => 'providers.create', 'class'=>'d-flex flex-column')) !!}
-                <h5 class="card-title">Crear</h5>
+                {!! Form::open(array( 'route' => array('providers.update', $provider->id), 'method' => 'put', 'class' => 'd-flex flex-column')) !!}
+                <h5 class="card-title">Actualizar</h5>
                 {!! Form::label('name', 'Nombre') !!}
-                {!! Form::text('name', isset($provider) ? $provider->name : null, array('placeholder' => 'Indica el nombre del nuevo proveedor') ) !!}
+                {!! Form::text('name', $provider->name , array('placeholder' => 'Indica el nombre del nuevo proveedor') ) !!}
                 {!! Form::label('description', 'Descripción') !!}
-                {!! Form::text('description', isset($provider) ? $provider->name : null, array('placeholder' => 'Indica anotaciones o descripción') ) !!}
+                {!! Form::text('description', $provider->description, array('placeholder' => 'Indica anotaciones o descripción') ) !!}
                 {!! Form::label('provider_type_id', 'Tipo de Proveedor') !!}
-                {!! Form::select("provider_type_id", $providerTypes->pluck('type', 'id'), isset($provider) ? $provider->provider_type_id : null)!!}
+                {!! Form::select("provider_type_id", $providerTypes->pluck('type', 'id'), $provider->provider_type_id )!!}
                 {{ Form::button('Enviar', ['type' => 'submit', 'class' => 'btn btn-info'] )  }}
                 {!! Form::close() !!}
 

@@ -1,33 +1,9 @@
 @extends('layouts/master')
 
-@section('title', 'Crear Provedor')
+@section('title', 'Crear Clasificación')
     
 @section('inline-css')
 <style>
-.main-container-update {
-    background-image: linear-gradient(
-        to bottom,
-        #b675e7,
-        #af6ae8,
-        #a85fe9,
-        #a054ea,
-        #9749eb
-    );
-    height: 100vh;
-}
-
-.container-json-update,
-.container-item-update {
-    margin-bottom: 30px;
-    background-color: #fafafa;
-    color: #b657ee;
-    min-height: 500px;
-    width: 80vw;
-    -webkit-box-shadow: 0px 0px 20px 0px rgba(120, 116, 120, 1);
-    -moz-box-shadow: 0px 0px 20px 0px rgba(120, 116, 120, 1);
-    box-shadow: 0px 0px 20px 0px rgba(120, 116, 120, 1);
-    max-width: 35vw;
-}
 .form-container {
     max-width: 360px;
     padding: 30px;
@@ -62,8 +38,6 @@
 @endsection
 
 @section('main')
-<section class="main-container-update flex-column container-fluid d-flex justify-content-around align-items-center">
-    <h4><a href="{{route('configuration')}}">Configuración</a> / <strong>Nuevo proveedor</strong></h4>
 <div class="card-deck flex-column">
     <div class="header-update">
     </div>
@@ -79,14 +53,12 @@
                     </ul>
                 </div>
             @endif
-                {!! Form::open(array('route' => 'providers.create', 'class'=>'d-flex flex-column')) !!}
+                {!! Form::open(array('route' => 'classifications.store', 'class'=>'d-flex flex-column')) !!}
                 <h5 class="card-title">Crear</h5>
-                {!! Form::label('name', 'Nombre') !!}
-                {!! Form::text('name', isset($provider) ? $provider->name : null, array('placeholder' => 'Indica el nombre del nuevo proveedor') ) !!}
+                {!! Form::label('tyoe', 'Nombre') !!}
+                {!! Form::text('type', null, array('placeholder' => 'Nombra una clasificación de tus productos.') ) !!}
                 {!! Form::label('description', 'Descripción') !!}
-                {!! Form::text('description', isset($provider) ? $provider->name : null, array('placeholder' => 'Indica anotaciones o descripción') ) !!}
-                {!! Form::label('provider_type_id', 'Tipo de Proveedor') !!}
-                {!! Form::select("provider_type_id", $providerTypes->pluck('type', 'id'), isset($provider) ? $provider->provider_type_id : null)!!}
+                {!! Form::text('description', null, array('placeholder' => 'Indica anotaciones o descripción') ) !!}
                 {{ Form::button('Enviar', ['type' => 'submit', 'class' => 'btn btn-info'] )  }}
                 {!! Form::close() !!}
 
@@ -96,6 +68,5 @@
             <small class="text-muted">Last updated 3 mins ago</small>
         </div>
     </div>
-    </div>
-</section>
+</div>
 @endsection
