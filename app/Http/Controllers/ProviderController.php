@@ -197,4 +197,33 @@ class ProviderController extends Controller
                 ->back()->withErrors('La clasificación no pudo ser eliminada. Por favor contactar a administración');
         }
     }
+
+    /**
+     * @param int $id
+     */
+    public function configurate($id)
+    {
+       // try {
+            /** @var Provider $provider */
+            $provider = $this->providerRepository->getById($id);
+
+            if (!$provider){
+                throw new Exception("No se encontró proveedor con id: {$id}. Contacte administración.");
+            }
+            /** @var Category $category */
+            //$this->providerRepository->delete($provider);
+
+
+            return view('providers.configurate.index')
+                ->with('alert_success', 'El proveedor ha sido eliminado correctamente.')
+                ->with('provider', $provider);
+
+        // } catch (Exception $e) {
+        //     DB::rollback();
+        //     logger($e->getMessage());
+        //     logger($e->getTraceAsString());
+        //     return redirect()
+        //         ->back()->withErrors('La clasificación no pudo ser eliminada. Por favor contactar a administración');
+        // }
+    }
 }
