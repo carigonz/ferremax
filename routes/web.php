@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
     
     // providers
     Route::get('/providers/{id}/config', 'ProviderController@configurate')->name('providers.config');
+    Route::get('/providers/{id}/config/catalogs', 'CatalogController@create')->name('catalogs.create');
     Route::resource('/providers', 'ProviderController')->name('*','providers');
 
     // classifications
