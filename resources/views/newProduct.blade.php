@@ -21,9 +21,6 @@
 				<label for="id_supplier">Proveedor: </label>
 				<select name="id_supplier" id="id_supplier">
 					<option selected value="0">Elija una opción</option>
-						@for ($i = 0; $i < count($suppliers) ; $i++)
-							<option value="{{$i}}">{{$suppliers[$i]}}</option>
-						@endfor
 				</optgroup>
 				</select>
 				<label for="description">descripcion: </label>

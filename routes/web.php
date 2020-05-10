@@ -43,13 +43,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/search/action', 'ProductController@action')->name('search.action');
     
     // providers
+    Route::get('/providers/{id}/config', 'ProviderController@configurate')->name('providers.config');
     Route::resource('/providers', 'ProviderController')->name('*','providers');
+
     // classifications
     Route::resource('/classifications', 'ClassificationController')->name('*','classifications');
     // categories
     Route::resource('/categories', 'CategoryController')->name('*','categories');
     // sections
     Route::resource('/sections', 'SectionController')->name('*','sections');
+    // products
+    Route::resource('/products', 'ProductController')->name('*','products');
 
     Route::get('/update', 'ProductController@viewUpdate')->name('update');
     

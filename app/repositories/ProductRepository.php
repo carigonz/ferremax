@@ -4,7 +4,7 @@ namespace App\Repositories;
 use App\Models\Product;
 use Illuminate\Support\Collection;
 
-class ProducttRepository extends AbstractRepository
+class ProductRepository extends AbstractRepository
 {
     function __construct(Product $model)
     {
@@ -20,9 +20,9 @@ class ProducttRepository extends AbstractRepository
     {
         $joins = collect();
         $query = $this->model
-            ->join('suppliers', 'products.supplier_id', '=', 'suppliers.id')
-            ->select('products.*')
-            ->addSelect('suppliers.name');
+            //->join('suppliers', 'products.supplier_id', '=', 'suppliers.id')
+            ->select('products.*');
+            //->addSelect('suppliers.name');
 
         if($distinct){
             $query->distinct('products.id');
@@ -36,8 +36,8 @@ class ProducttRepository extends AbstractRepository
             }
         }
 
-        if (isset($params['supplier_id']) && $params['supplier_id']) {
-            $query->ofSupplierId($params['supplier_id']);
+        if (isset($params['catalog_id']) && $params['catalog_id']) {
+            $query->ofCatalogId($params['catalog_id']);
         }
 
         // if (isset($params['country_id']) && $params['country_id']) {
