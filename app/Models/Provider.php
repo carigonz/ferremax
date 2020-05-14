@@ -36,7 +36,7 @@ class Provider extends Model
 
     public function discounts()
     {
-        return $this->morphMany(TariffDiscount::class, 'discountable');
+        return $this->morphMany(Discount::class, 'discountable');
     }
 
     public function scopeOfType($query, $type)

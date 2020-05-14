@@ -10,9 +10,12 @@ use Illuminate\Database\Eloquent\Model;
  * Class Catalog
  * 
  * @property string $name
+ * @property string $acronym
  * @property string|null $description
  * @property boolean $taxes
  * @property Provider $provider_id
+ * @property float|null $taxes_amount
+ * @property string $file_name
  */
 class Catalog extends Model
 {
@@ -20,14 +23,17 @@ class Catalog extends Model
 
     protected $fillable = [
         'name',
+        'acronym',
         'description',
         'taxes',
-        'provider_id'
+        'provider_id',
+        'taxes_amount',
+        'file_name'
     ];
 
-    protected $hidden = ['id'];
+    protected $hidden = ['id','providers'];
 
-    protected $with = ['providers'];
+    protected $with = [];
 
     public function provider()
     {
@@ -36,6 +42,12 @@ class Catalog extends Model
 
     public function discounts()
     {
-        return $this->morphMany(TariffDiscount::class, 'discountable');
+        return $this->morphMany(Discount::class, 'discountable');
+    }
+
+    /** @param float $neto */
+    public function getTariffWithIVA($neto)
+    {
+        return ($neto * ($this->taxes_amount / 100)) + $neto ;
     }
 }
