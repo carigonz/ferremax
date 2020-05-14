@@ -4,46 +4,6 @@
     
 @section('inline-css')
 <style>
-.main-container-update {
-    background-image: linear-gradient(
-        to bottom,
-        #b675e7,
-        #af6ae8,
-        #a85fe9,
-        #a054ea,
-        #9749eb
-    );
-    height: 100vh;
-}
-
-.container-json-update,
-.container-item-update {
-    margin-bottom: 30px;
-    background-color: #fafafa;
-    color: #b657ee;
-    min-height: 500px;
-    width: 80vw;
-    -webkit-box-shadow: 0px 0px 20px 0px rgba(120, 116, 120, 1);
-    -moz-box-shadow: 0px 0px 20px 0px rgba(120, 116, 120, 1);
-    box-shadow: 0px 0px 20px 0px rgba(120, 116, 120, 1);
-    max-width: 35vw;
-}
-.form-container {
-    max-width: 360px;
-    padding: 30px;
-    vertical-align: middle;
-}
-.header-update {
-    margin-bottom: 20px;
-    color: #fafafa;
-    width: 82vw;
-}
-
-.has-error {
-    color: red;
-    font-size: 1.2em;
-}
-
     #card {
         margin: auto;
         width: 82vw;
@@ -62,11 +22,8 @@
 @endsection
 
 @section('main')
-<section class="main-container-update flex-column container-fluid d-flex justify-content-around align-items-center">
     <h4><a href="{{route('configuration')}}">Configuración</a> / <strong>Nuevo proveedor</strong></h4>
 <div class="card-deck flex-column">
-    <div class="header-update">
-    </div>
     <div class="card" id="card">
         <div class="card-body container form-std d-flex flex-column">
             <div class="row">
@@ -84,7 +41,7 @@
                     <div class="form-group d-flex flex-column">
                         {!! Form::label('acronym', 'Acrónimo') !!}
                         {!! Form::text('acronym', null, array('placeholder' => 'Indica el acrónimo de la lista') ) !!}
-                        <small>El acrónimo es usado para modificar los codigos de los productos que tengan esta lista asociada. Eso permite tener dos codigos iguales para el mismo producto, pero trazando la diferencia de que son pertenecientes a distintas listas. De 2 a 4 caracteres.</small>
+                        <small>El acrónimo es usado para modificar los codigos de los productos que tengan esta lista asociada. Eso permite tener dos codigos iguales para el mismo producto, pero trazando la diferencia de que son pertenecientes a listas distintas. De 2 a 4 caracteres.</small>
                     </div>
                     <div class="form-group d-flex flex-column">
                         {!! Form::label('file', 'Adjunte la lista') !!}
@@ -97,7 +54,7 @@
                     </div>
                     <div class="form-group flex-column " id="taxes_select">
                         {!! Form::label('taxes_amount', 'Agregar IVA a la lista') !!}
-                        {!! Form::select('taxes_amount', [12 => 'Medio IVA (11.5%)', 21 => 'IVA completo (21%)'], null, ['class'=>'form-control taxes_amount', 'placeholder' => 'Seleccione condicion de IVA']) !!}
+                        {!! Form::select('taxes_amount', [12 => 'Medio IVA (11.5%)', 21 => 'IVA completo (21%)'], 0, ['class'=>'form-control taxes_amount', 'placeholder' => 'Seleccione condicion de IVA']) !!}
                     </div>
                     <h5>Descuentos</h5>
                     <p>Los descuentos serán aplicados sobre el precio neto. En caso de existir precio publico, no se aplicará ningún descuento cargado acontinuacion. La información del campo precio_publico es absoluta.</p>
@@ -166,7 +123,6 @@
         </div>
     </div>
     </div>
-</section>
 @endsection
 
 @section('inline-scripts')

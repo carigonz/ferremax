@@ -109,7 +109,7 @@ class CatalogController extends Controller
             'acronym' => 'required|unique:catalogs|max:255',
             'file' => 'required|max:50000|mimetypes:application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/x-vnd.oasis.opendocument.spreadsheet',
             'taxes' => 'boolean',
-            'taxes_amount' => 'regex:/^\d+(\.\d{1,2})?$/',
+            'taxes_amount' => 'regex:/^\d+(\.\d{1,2})?$/|nullable',
             "discounts"    => "array|min:1",
             "discounts.*"  => "required|regex:/^\d+(\.\d{1,2})?$/",
         ]);
@@ -124,7 +124,7 @@ class CatalogController extends Controller
             # Prepare Catalog Instance
             $catalogRequest['provider_id'] = $id;
             $catalogRequest['acronym'] = strtoupper($catalogRequest['acronym']);
-            $param['taxes_amount'] = isset($catalogRequest['taxes']) ? null : $catalogRequest['taxes_amount'] ;
+            $catalogRequest['taxes_amount'] = isset($catalogRequest['taxes']) ? 21 : $catalogRequest['taxes_amount'] ;
             $catalogRequest['name'] = ucfirst(mb_strtolower($catalogRequest['name']));
             $catalogRequest['file_name'] = $file_name;
         
@@ -135,13 +135,15 @@ class CatalogController extends Controller
             $catalog = $this->catalogRepository->create($catalogRequest);
     
             # Store discounts instances
-            foreach ($catalogRequest['discounts'] as $discount) {
-                $this->discountRepository->create([
-                    'discountable_id' => $catalog->id,
-                    'discountable_type' => Catalog::class,
-                    'amount' => floatval($discount),
-                    'active' => true
-                ]);
+            if (isset($catalogRequest['discounts'])) {
+                foreach ($catalogRequest['discounts'] as $discount) {
+                    $this->discountRepository->create([
+                        'discountable_id' => $catalog->id,
+                        'discountable_type' => Catalog::class,
+                        'amount' => floatval($discount),
+                        'active' => true
+                    ]);
+                }
             }
 
             # Import products
@@ -159,7 +161,7 @@ class CatalogController extends Controller
             return redirect()->back()
                 //->withErrors($validator)
                 ->withInput($catalogRequest)
-                ->withErrors('La lista no pudo ser procesada. Por favor contactar a administración');
+                ->withErrors('La lista no pudo ser procesada. Verifique que los nombres de las columnas sean correctos. Por favor contactar a administración');
         }
     }
 

@@ -22,7 +22,9 @@ class Provider extends Model
         'name',
         'description',
         'phone',
-        'provider_type_id'
+        'provider_type_id',
+        'parent_id',
+        'status'
     ];
 
     protected $hidden = ['id'];
@@ -32,6 +34,11 @@ class Provider extends Model
     public function providerType()
     {
         return $this->belongsTo(ProviderType::class, 'provider_type_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Provider::class, 'parent_id');
     }
 
     public function discounts()

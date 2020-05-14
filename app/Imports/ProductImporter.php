@@ -26,6 +26,9 @@ class ProductImporter implements ToModel, WithHeadingRow, WithBatchInserts, With
     */
     public function model(array $row)
     {
+        # custom code
+        $row['codigo'] = $this->catalog->acronym . '-' . (string)$row['codigo'];
+
         if (isset($row['costo'])) {
             $costPrice = $this->currencyToDecimal($row['costo']);
 
@@ -40,26 +43,27 @@ class ProductImporter implements ToModel, WithHeadingRow, WithBatchInserts, With
         # add taxes when needed
         if (!isset($row['publico']) && !isset($row['precio_publico']) && $this->catalog->taxes == false) {
             $publicPrice = $this->addTaxesToCostPrice($costPrice);
+        } elseif ($this->catalog->taxes && !isset($row['publico']) && !isset($row['precio_publico'])) {
+            $publicPrice = $costPrice;
         }
 
-        if (!isset($publicPrice)){
+        if (!isset($publicPrice) && !isset($row['publico']) and !isset($row['precio_publico'])){
             throw new Exception('Hubo un error al formatear el precio al público. Contacte administración.');
         }
 
         if ($this->catalog->has('discounts')) {
-            logger('entre en el if de los discounts');
             $this->processDiscounts($publicPrice);
         }
 
-        $this->addGanancia($publicPrice);
+        $finalPrice = $this->addGanancia($publicPrice);
 
         return new Product([
-            'name' => $row['nombre'],
-            'code' => $this->catalog->acronym . '-' . $row['codigo'],
+            'name' => ucfirst(mb_strtolower($row['nombre'])),
+            'code' => $row['codigo'],
             'price' => $costPrice ,
-            'public_price' => $row['publico'] ?? $row['precio_publico'] ?? $publicPrice ,
+            'public_price' => $row['publico'] ?? $row['precio_publico'] ?? $finalPrice ,
             'catalog_id' => $this->catalog->id,
-            'description' => $row['descripcion'] ?? null,
+            'description' => ucfirst(mb_strtolower($row['descripcion'])) ?? null,
             'custom' => $row['custom'] ?? 0,
             'section_id' => $row['section'] ?? null,
         ]);
@@ -75,19 +79,20 @@ class ProductImporter implements ToModel, WithHeadingRow, WithBatchInserts, With
         return 1000;
     }
 
-    /** @param float $cost */
-    private function addGanancia(&$value) 
+    /** @param float $value */
+    private function addGanancia($value) 
     {
-        $value * 1.4;
+        return ($value * 1.4);
     }
 
-    /** @param float $cost */
+    /** @param float $value */
     private function processDiscounts(&$value) 
     {
         /** @var Discount $discount */
-        foreach ($this->catalog->discounts() as $discount) {
-            $value = $value - ($discount->amount / 100);
+        foreach ($this->catalog->discounts()->get() as $discount) {
+            $value = $value - ($value * ($discount->amount / 100));
         }
+        return $value;
     }
 
     /** @param float $cost */
