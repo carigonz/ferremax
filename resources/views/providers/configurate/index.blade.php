@@ -13,11 +13,6 @@
         margin-bottom: 35px;
     }
     
-    .has-error {
-        color: red;
-        font-size: 1.2em;
-    }
-    
     #card {
         margin: auto;
         width: 82vw;
@@ -37,13 +32,13 @@
         </div> --}}
         <div class="card" id="card">
             <div class="card-body container m-0">
-                <div class="col-12">
-                    <div class="row header-update">
-                    <h1 class="card-title col-9 mb-0">Configurar {{ $provider->name}}</h1>
-                    {{-- <a href="{{ route('providers.create')}}" type="button" class="btn btn-info btn-lg col-3">Nuevo Proveedor</a> --}}
-                    </div>
-                    <div class="table-container row">
-                        <table class="table table-responsive table-striped col-12">
+                <div class="row header-update">
+                <h1 class="card-title col-9 mb-0">Configurar {{ $provider->name}}</h1>
+                {{-- <a href="{{ route('providers.create')}}" type="button" class="btn btn-info btn-lg col-3">Nuevo Proveedor</a> --}}
+                </div>
+                <div class="table-container row">
+                    <div class="col-8">
+                        <table class="table table-responsive table-striped">
                             <thead>
                                 <tr class="table-success">
                                 <th scope="col">ID</th>
@@ -58,37 +53,37 @@
                                 <tr>
                                     <th scope="row">{{ $provider->id }}</th>
                                     <td class="text-muted">{{ $provider->name }}</td>
-                                    <td>{{ isset($provider->description) ? $provider->description : '' }}</td>
-                                    <td>{{ $provider->providerType->type }}</td>
+                                    <td class="text-muted">{{ isset($provider->description) ? $provider->description : '' }}</td>
+                                    <td class="text-muted">{{ $provider->providerType->type }}</td>
                                     <td><span data-toggle="tooltip" data-placement="top" title="{{ $provider->status ? 'Activo' : 'Inactivo - de baja' }}" class="btn btn-outline-{{ $provider->status ? 'success' : 'danger' }} btn-sm text-center"><i class="fas fa-toggle-{{ $provider->status ? 'on' : 'off' }}"></span></i></td>
                                     <td>
                                         {!! Form::open(array('route' => array('catalogs.create', $provider->id), 'class'=>'d-inline', 'method' => 'GET')) !!}
-                                        <button title="Borrar proveedor" type="submit" class="btn btn-light btn-sm">Crear Lista</button>
+                                        <button title="Borrar proveedor" type="submit" class="btn btn-outline-info">Crear Lista</button>
                                         {!! Form::close() !!}
                                     </td>
                                 </tr>
-                                <tr>
-                                <th scope="row">X</th>
-                                <td>Ningun proveedor activo </td>
-                                </tr>
                             </tbody>
-                            </table>
+    
+                        </table>
+                        {!! Form::open(array('route' => array('providers.update', $provider->id), 'class'=>'d-inline', 'method' => 'PUT')) !!}
+                        {!! Form::hidden( 'status', $provider->status ? false : true ) !!}
+                            <button class="btn btn-outline-info btn-lg">Cambiar status del proveedor</button>
+                        {!! Form::close() !!}
                     </div>
-
-                    <div class="catalogs">
-                        <h4>Listas adjuntadas</h4>
+                    <div class="catalogs col-4">
+                        <h4>Listas adjuntadas - configurar</h4>
                         <ul>
-                           {{--  @forelse ($catalogs as $catalod)
-                                <li><button type="button" class="btn btn-info">
-                                    Profile <span class="badge badge-light">9</span>
-                                    <span class="sr-only">unread messages</span>
-                                  </button></li>
+                            @forelse ($catalogs as $catalog)
+                                <li>
+                                    {!! Form::open(array('route' => array('catalogs.show', $provider->id, $catalog->id), 'class'=>'d-inline', 'method' => 'GET')) !!}
+                                    <button class="btn btn-light">
+                                    {{ $catalog->name }} 
+                                    </button>
+                                    {!! Form::close() !!}
+                                </li>
                             @empty
-                                <button type="button" class="btn btn-warning">
-                                    Ningna lista cargada <span class="badge badge-light">9</span>
-                                    <span class="sr-only">unread messages</span>
-                                </button>
-                            @endforelse --}}
+                                <li>Ninguna lista cargada.</li>
+                            @endforelse
                         </ul>
                     </div>
                 </div>
