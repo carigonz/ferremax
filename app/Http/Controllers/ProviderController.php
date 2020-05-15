@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\ProviderTypeRepository;
 use App\Repositories\ProviderRepository;
+use App\Repositories\CatalogRepository;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,10 +17,14 @@ class ProviderController extends Controller
     /** @var ProviderTypeRepository $providerTypeRepository */
     protected $providerTypeRepository;
 
-    public function __construct(ProviderTypeRepository $providerTypeRepository, ProviderRepository $providerRepository)
+    /** @var CatalogRepository $catalogRepository */
+    protected $catalogRepository;
+
+    public function __construct(ProviderTypeRepository $providerTypeRepository, ProviderRepository $providerRepository, CatalogRepository $catalogRepository)
     {
         $this->providerTypeRepository = $providerTypeRepository;
         $this->providerRepository = $providerRepository;
+        $this->catalogRepository = $catalogRepository;
     }
     /**
      * 
@@ -133,12 +138,18 @@ class ProviderController extends Controller
     public function update(Request $request, $id)
     {
         $params = $request->validate([
-            'name' => 'required|min:3|max:255',
+            'name' => 'min:3|max:255',
             'description' => 'max:255',
-            'provider_type_id' => 'integer|required'
+            'provider_type_id' => 'integer',
+            'status' => 'boolean'
         ]);
-        $params['name'] = ucfirst(mb_strtolower($params['name']));
-        $params['description'] = ucfirst(mb_strtolower($params['description']));
+
+        if (isset($params['name'] )) {
+            $params['name'] = ucfirst(mb_strtolower($params['name']));
+
+        } elseif (isset($params['description'])) {
+            $params['description'] = ucfirst(mb_strtolower($params['description']));
+        }
         
         try {
 
@@ -155,7 +166,7 @@ class ProviderController extends Controller
             DB::commit();
 
             return redirect()->route('providers.index')
-                ->with('alert_success', "El proveedor ha sido actualizada.");
+                ->with('alert_success', "El proveedor ha sido actualizado.");
 
         } catch (Exception $e) {
             DB::rollback();
@@ -210,12 +221,12 @@ class ProviderController extends Controller
             if (!$provider){
                 throw new Exception("No se encontró proveedor con id: {$id}. Contacte administración.");
             }
-            /** @var Category $category */
-            //$this->providerRepository->delete($provider);
 
+            /** @var Collection $catalogs */
+            $catalogs = $this->catalogRepository->search(['provider_id' => $provider->id])->get();
 
             return view('providers.configurate.index')
-                ->with('alert_success', 'El proveedor ha sido eliminado correctamente.')
+                ->with('catalogs', $catalogs)
                 ->with('provider', $provider);
 
         // } catch (Exception $e) {

@@ -43,9 +43,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/search/action', 'ProductController@action')->name('search.action');
     
     // providers
-    Route::get('/providers/{id}/config', 'ProviderController@configurate')->name('providers.config');
-    Route::get('/providers/{id}/config/catalogs', 'CatalogController@create')->name('catalogs.create');
+    Route::get('/providers/{id}/config', 'ProviderController@configurate')->name('providers.config');
     Route::resource('/providers', 'ProviderController')->name('*','providers');
+
+    //catalogs
+    Route::get('/providers/{id}/config/catalogs', 'CatalogController@create')->name('catalogs.create');
+    Route::post('/providers/{id}/config/catalogs', 'CatalogController@store')->name('catalogs.store');
+    Route::get('/providers/{id}/catalogs/{catalog_id}', 'CatalogController@show')->name('catalogs.show');
+    Route::post('/providers/{id}/catalogs/{catalog_id}', 'CatalogController@update')->name('catalogs.update');
 
     // classifications
     Route::resource('/classifications', 'ClassificationController')->name('*','classifications');

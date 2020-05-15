@@ -10,11 +10,13 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property string $code
  * @property string $name
- * @property Tariff $tariff_id
+ * @property float $price
+ * @property float|null $public_price
+ * @property bool|false $custom
  * @property Catalog $catalog_id
  * @property Section|null $section_id
- * @property string $description
- * @property int $stock
+ * @property string|null $description
+ * @property int|null $stock
  */
 class Product extends Model
 {
@@ -23,8 +25,10 @@ class Product extends Model
     protected $fillable = [
         'code',
         'name',
+        'price',
+        'public_price',
+        'custom',
         'section_id',
-        'tariff_id',
         'catalog_id',
         'description',
         'stock'
@@ -36,7 +40,7 @@ class Product extends Model
 
     public function discounts()
     {
-        return $this->morphMany(TariffDiscount::class, 'discountable');
+        return $this->morphMany(Discount::class, 'discountable');
     }
 
     public function catalog()
@@ -44,9 +48,9 @@ class Product extends Model
         return $this->belongsTo(Catalog::class, 'catalog_id');
     }
 
-    public function tariff()
+    public function Section()
     {
-        return $this->hasOne(Tariff::class);
+        return $this->belongsTo(Section::class);
     }
 
     // public function scopeOfSupplierId($query, $id){

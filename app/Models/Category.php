@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Section;
-use App\Models\TariffDiscount;
+use App\Models\Discount;
 use App\Models\Classification;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,7 +29,7 @@ class Category extends Model
 
     public function discounts()
     {
-        return $this->morphMany(TariffDiscount::class, 'discountable');
+        return $this->morphMany(Discount::class, 'discountable');
     }
 
     public function classification()

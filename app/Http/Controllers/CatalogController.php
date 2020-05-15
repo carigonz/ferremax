@@ -2,60 +2,68 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\CategoryRepository;
-use App\Repositories\ClassificationRepository;
+use App\Repositories\CatalogRepository;
+use App\Repositories\ProviderRepository;
 use Exception;
+use App\Imports\ProductImporter;
+use App\Repositories\DiscountRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Catalog;
 
 class CatalogController extends Controller
 {
-    /** @var CategoryRepository $categoryRepository */
-    protected $categoryRepository;
+    /** @var CatalogRepository $catalogRepository */
+    protected $catalogRepository;
 
-    /** @var ClassificationRepository $classificationRepository */
-    protected $classificationRepository;
+    /** @var ProviderRepository $providerRepository */
+    protected $providerRepository;
 
-    public function __construct(CategoryRepository $categoryRepository, ClassificationRepository $classificationRepository)
+    /** @var DiscountRepository $discountRepository */
+    protected $discountRepository;
+
+    public function __construct(CatalogRepository $catalogRepository, ProviderRepository $providerRepository, DiscountRepository $discountRepository)
     {
-        $this->categoryRepository = $categoryRepository;
-        $this->classificationRepository = $classificationRepository;
+        $this->catalogRepository = $catalogRepository;
+        $this->providerRepository = $providerRepository;
+        $this->discountRepository = $discountRepository;
     }
     /**
      * 
      */
-    public function index()
-    {
-        try {
-            /** @var Collection $categories */
-            $categories = $this->categoryRepository->all();
+    // public function index()
+    // {
+    //     try {
+    //         /** @var Collection $categories */
+    //         $categories = $this->categoryRepository->all();
 
-            /** @var Collection $classifications */
-            $classifications = $this->classificationRepository->all();
+    //         /** @var Collection $classifications */
+    //         $classifications = $this->classificationRepository->all();
 
-            return view('categories.index')
-                ->with('categories', $categories)
-                ->with('classifications', $classifications);
+    //         return view('categories.index')
+    //             ->with('categories', $categories)
+    //             ->with('classifications', $classifications);
 
-        } catch (Exception $e) {
-            logger($e->getMessage());
-            logger($e->getTraceAsString());
-            return redirect()
-                ->back()
-                ->withErrors('Ha ocurrido un error imprevisto. Por favor contactar a administración');
-        }
-    } 
+    //     } catch (Exception $e) {
+    //         logger($e->getMessage());
+    //         logger($e->getTraceAsString());
+    //         return redirect()
+    //             ->back()
+    //             ->withErrors('Ha ocurrido un error imprevisto. Por favor contactar a administración');
+    //     }
+    // } 
     /**
      * Create new categories view
      */
-    public function create()
+    public function create($id)
     {
         /** @var Collection $providers */
-        //$classifications = $this->classificationRepository->all();
+        $provider = $this->providerRepository->getById($id);
 
         try {
             return view('providers.catalogs.create')
-            /* ->with('classifications', $classifications) */;
+            ->with('provider', $provider);
 
         } catch (Exception $e) {
             logger($e->getMessage());
@@ -67,20 +75,20 @@ class CatalogController extends Controller
     }
 
     /**
-     * Create new categorie v
+     * 
      */
-    public function show($id)
+    public function show($id, $catalog_id)
     {
         try {
-            /** @var Category $category */
-            $category = $this->categoryRepository->getById($id);
+            /** @var Provider $provider */
+            $provider = $this->providerRepository->search(['id' => $id])->with(['parent'])->first();
 
-            /** @var Collection $providers */
-            $classifications = $this->classificationRepository->all();
+            /** @var Catalog $catalog */
+            $catalog = $this->catalogRepository->getById($catalog_id);
 
-            return view('categories.show')
-                ->with('category', $category)
-                ->with('classifications', $classifications);
+            return view('providers.catalogs.show')
+                ->with('catalog', $catalog)
+                ->with('provider', $provider);
 
         } catch (Exception $e) {
             logger($e->getMessage());
@@ -94,42 +102,76 @@ class CatalogController extends Controller
     /**
      * @param Request $request
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
-        $params = $request->validate([
-            'name' => 'required|unique:categories|max:255',
-            'description' => 'required|max:255',
-            'classification_id' => 'required|int'
+        $catalogRequest = $request->validate([
+            'name' => 'required|max:255',
+            'acronym' => 'required|unique:catalogs|max:255',
+            'file' => 'required|max:50000|mimetypes:application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/x-vnd.oasis.opendocument.spreadsheet',
+            'taxes' => 'boolean',
+            'taxes_amount' => 'regex:/^\d+(\.\d{1,2})?$/|nullable',
+            "discounts"    => "array|min:1",
+            "discounts.*"  => "required|regex:/^\d+(\.\d{1,2})?$/",
         ]);
 
-        $params['name'] = ucfirst(mb_strtolower($params['name']));
-        $params['description'] = ucfirst(mb_strtolower($params['description']));
-
         try {
+            # Storage file 
+            $file = $catalogRequest['file'];
+            $file_name = $file->getClientOriginalName();
+            $file->move('files', $file_name);
+            unset($catalogRequest['file']);
+
+            # Prepare Catalog Instance
+            $catalogRequest['provider_id'] = $id;
+            $catalogRequest['acronym'] = strtoupper($catalogRequest['acronym']);
+            $catalogRequest['taxes_amount'] = isset($catalogRequest['taxes']) ? 21 : $catalogRequest['taxes_amount'] ;
+            $catalogRequest['name'] = ucfirst(mb_strtolower($catalogRequest['name']));
+            $catalogRequest['file_name'] = $file_name;
+        
             DB::beginTransaction();
 
-            /** @var CategoryRepository $category */
-            $this->categoryRepository->create($params);
+            # Create catalog instance
+            /** @var CatalogRepository $category */
+            $catalog = $this->catalogRepository->create($catalogRequest);
+    
+            # Store discounts instances
+            if (isset($catalogRequest['discounts'])) {
+                foreach ($catalogRequest['discounts'] as $discount) {
+                    $this->discountRepository->create([
+                        'discountable_id' => $catalog->id,
+                        'discountable_type' => Catalog::class,
+                        'amount' => floatval($discount),
+                        'active' => true
+                    ]);
+                }
+            }
+
+            # Import products
+            Excel::import(new ProductImporter($catalog), 'files/'. $file_name);
 
             DB::commit();
 
-            return redirect()->route('categories.index')
-                ->with('alert_success', 'La clasificación se ha creado correctamente');
+            return redirect()->back()
+                ->with('alert_success', 'La lista ha sido procesada correctamente');
 
         } catch (Exception $e) {
             DB::rollback();
             logger($e->getMessage());
             logger($e->getTraceAsString());
             return redirect()->back()
-                ->withErrors('La clasificación no pudo ser creada. Por favor contactar a administración');
+                //->withErrors($validator)
+                ->withInput($catalogRequest)
+                ->withErrors('La lista no pudo ser procesada. Verifique que los nombres de las columnas sean correctos. Por favor contactar a administración');
         }
     }
 
     /**
      * @param Request $request
+     * working here now
      */
     public function update(Request $request, $id)
     {
+        dd($request->all());
         $params = $request->validate([
             'name' => 'required|min:3|max:255',
             'description' => 'max:255',
@@ -162,33 +204,33 @@ class CatalogController extends Controller
     /**
      * @param int $id
      */
-    public function destroy($id)
-    {
-        try {
-            /** @var Category $category */
-            $category = $this->categoryRepository->getById($id);
+    // public function destroy($id)
+    // {
+    //     try {
+    //         /** @var Category $category */
+    //         $category = $this->categoryRepository->getById($id);
 
-            if (!$category){
-                throw new Exception("No se encontró clasificación con id: {$id}. Contacte administración.");
-            }
-            DB::beginTransaction();
+    //         if (!$category){
+    //             throw new Exception("No se encontró clasificación con id: {$id}. Contacte administración.");
+    //         }
+    //         DB::beginTransaction();
     
-            /** @var Category $category */
-            $this->categoryRepository->delete($category);
+    //         /** @var Category $category */
+    //         $this->categoryRepository->delete($category);
 
-            DB::commit();
+    //         DB::commit();
 
-            return redirect()
-                ->route('categories.index')
-                ->with('alert_success', 'La clasificación ha sido eliminada correctamente.');
+    //         return redirect()
+    //             ->route('categories.index')
+    //             ->with('alert_success', 'La clasificación ha sido eliminada correctamente.');
 
-        } catch (Exception $e) {
-            DB::rollback();
-            logger($e->getMessage());
-            logger($e->getTraceAsString());
-            return redirect()
-                ->back()->withErrors('La clasificación no pudo ser eliminada. Por favor contactar a administración');
-        }
-    }
+    //     } catch (Exception $e) {
+    //         DB::rollback();
+    //         logger($e->getMessage());
+    //         logger($e->getTraceAsString());
+    //         return redirect()
+    //             ->back()->withErrors('La clasificación no pudo ser eliminada. Por favor contactar a administración');
+    //     }
+    // }
 
 }

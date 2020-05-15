@@ -61,9 +61,9 @@
                                     <td>{{ $provider->name }}</td>
                                     <td>{{ isset($provider->description) ? $provider->description : '' }}</td>
                                     <td>{{ $provider->providerType->type }}</td>
-                                    <td> aca iria un status</td>
+                                    <td>{{ $provider->status ? 'Activo' : 'Inactivo' }}</td>
                                     <td>
-                                        {!! Form::open(array('route' => 'home'/* array('providers.config', $provider->id) */, 'class'=>'d-inline', 'method' => 'GET')) !!}
+                                        {!! Form::open(array('route' => array('providers.config', $provider->id), 'class'=>'d-inline', 'method' => 'GET')) !!}
                                         <button title="Configurar proveedor" type="submit" class="btn btn-outline-info btn-sm"><i class="fas fa-cog"></i></i></button>
                                         {!! Form::close() !!}
                                         <a href="{{ route('providers.show', ['id' => $provider->id ])}}" type="button" class="btn btn-outline-info btn-sm"><i class="fas fa-edit" style="color: black"></i></a>

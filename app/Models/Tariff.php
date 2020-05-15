@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Product;
-use App\Models\TariffDiscount;
+use App\Models\Discount;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -26,7 +26,7 @@ class Tariff extends Model
 
     public function discounts()
     {
-        return $this->morphMany(TariffDiscount::class, 'discountable');
+        return $this->morphMany(Discount::class, 'discountable');
     }
 
     public function product()

@@ -7,21 +7,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class tariff discount
+ * Class discount
  * 
  * @property int $discountable_id
  * @property Model $discountable_type
- * @property decimal $amount
- * @property Provider $provider_id
+ * @property float $amount
+ * @property boolean $active
  */
-class TariffDiscount extends Model
+class Discount extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
         'discountable_id',
         'discountable_type',
-        'amount'
+        'amount',
+        'active'
     ];
 
     protected $hidden = ['id'];
