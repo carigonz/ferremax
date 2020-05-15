@@ -69,3 +69,27 @@ body {
     width: 100vw;
     z-index: 3333;
 }
+
+/* cards */
+
+.form-container {
+    max-width: 360px;
+    padding: 30px;
+    vertical-align: middle;
+}
+.header-update {
+    margin-bottom: 35px;
+}
+
+.has-error {
+    color: red;
+    font-size: 1.2em;
+}
+
+#card {
+    margin: auto;
+    width: 82vw;
+    padding: 20px 30px;
+    margin-bottom: 40px;
+    display: block;
+}

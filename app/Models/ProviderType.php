@@ -28,4 +28,12 @@ class ProviderType extends Model
     {
         return $this->hasMany(Provider::class);
     }
+
+    public function isDistribuidora()
+    {
+        return $this->type == 'Distribuidora';
+    }
+    
+    
+
 }

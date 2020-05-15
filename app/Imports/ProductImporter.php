@@ -26,6 +26,14 @@ class ProductImporter implements ToModel, WithHeadingRow, WithBatchInserts, With
     */
     public function model(array $row)
     {
+        if ($row->filter()->isEmpty()) {
+            return null;
+        } 
+
+        if (!is_numeric($row['costo']) or !is_numeric($row['neto'])) {
+            return null;
+        }
+
         # custom code
         $row['codigo'] = $this->catalog->acronym . '-' . (string)$row['codigo'];
 

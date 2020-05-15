@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Provider $provider_id
  * @property float|null $taxes_amount
  * @property string $file_name
+ * @property Collection|Discount $discounts
  */
 class Catalog extends Model
 {
@@ -49,5 +50,10 @@ class Catalog extends Model
     public function getTariffWithIVA($neto)
     {
         return ($neto * ($this->taxes_amount / 100)) + $neto ;
+    }
+
+    public function scopeOfProviderId($query, $id)
+    {
+        return $query->where('provider_id', $id);
     }
 }

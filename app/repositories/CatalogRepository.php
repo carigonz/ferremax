@@ -34,9 +34,9 @@ class CatalogRepository extends AbstractRepository
             }
         }
 
-        // if (isset($params['type']) && $params['type']) {
-        //     $query->ofType($params['type']);
-        // }
+        if (isset($params['provider_id']) && $params['provider_id']) {
+            $query->ofProviderId($params['provider_id']);
+        }
 
         // if (isset($params['country_id']) && $params['country_id']) {
         //     $this->addJoin($joins, 'services', 'services.id', 'agreements.service_id');

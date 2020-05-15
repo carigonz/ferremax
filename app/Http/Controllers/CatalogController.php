@@ -32,27 +32,27 @@ class CatalogController extends Controller
     /**
      * 
      */
-    public function index()
-    {
-        try {
-            /** @var Collection $categories */
-            $categories = $this->categoryRepository->all();
+    // public function index()
+    // {
+    //     try {
+    //         /** @var Collection $categories */
+    //         $categories = $this->categoryRepository->all();
 
-            /** @var Collection $classifications */
-            $classifications = $this->classificationRepository->all();
+    //         /** @var Collection $classifications */
+    //         $classifications = $this->classificationRepository->all();
 
-            return view('categories.index')
-                ->with('categories', $categories)
-                ->with('classifications', $classifications);
+    //         return view('categories.index')
+    //             ->with('categories', $categories)
+    //             ->with('classifications', $classifications);
 
-        } catch (Exception $e) {
-            logger($e->getMessage());
-            logger($e->getTraceAsString());
-            return redirect()
-                ->back()
-                ->withErrors('Ha ocurrido un error imprevisto. Por favor contactar a administración');
-        }
-    } 
+    //     } catch (Exception $e) {
+    //         logger($e->getMessage());
+    //         logger($e->getTraceAsString());
+    //         return redirect()
+    //             ->back()
+    //             ->withErrors('Ha ocurrido un error imprevisto. Por favor contactar a administración');
+    //     }
+    // } 
     /**
      * Create new categories view
      */
@@ -75,20 +75,20 @@ class CatalogController extends Controller
     }
 
     /**
-     * Create new categorie v
+     * 
      */
-    public function show($id)
+    public function show($id, $catalog_id)
     {
         try {
-            /** @var Category $category */
-            $category = $this->categoryRepository->getById($id);
+            /** @var Provider $provider */
+            $provider = $this->providerRepository->search(['id' => $id])->with(['parent'])->first();
 
-            /** @var Collection $providers */
-            $classifications = $this->classificationRepository->all();
+            /** @var Catalog $catalog */
+            $catalog = $this->catalogRepository->getById($catalog_id);
 
-            return view('categories.show')
-                ->with('category', $category)
-                ->with('classifications', $classifications);
+            return view('providers.catalogs.show')
+                ->with('catalog', $catalog)
+                ->with('provider', $provider);
 
         } catch (Exception $e) {
             logger($e->getMessage());
@@ -167,9 +167,11 @@ class CatalogController extends Controller
 
     /**
      * @param Request $request
+     * working here now
      */
     public function update(Request $request, $id)
     {
+        dd($request->all());
         $params = $request->validate([
             'name' => 'required|min:3|max:255',
             'description' => 'max:255',
@@ -202,33 +204,33 @@ class CatalogController extends Controller
     /**
      * @param int $id
      */
-    public function destroy($id)
-    {
-        try {
-            /** @var Category $category */
-            $category = $this->categoryRepository->getById($id);
+    // public function destroy($id)
+    // {
+    //     try {
+    //         /** @var Category $category */
+    //         $category = $this->categoryRepository->getById($id);
 
-            if (!$category){
-                throw new Exception("No se encontró clasificación con id: {$id}. Contacte administración.");
-            }
-            DB::beginTransaction();
+    //         if (!$category){
+    //             throw new Exception("No se encontró clasificación con id: {$id}. Contacte administración.");
+    //         }
+    //         DB::beginTransaction();
     
-            /** @var Category $category */
-            $this->categoryRepository->delete($category);
+    //         /** @var Category $category */
+    //         $this->categoryRepository->delete($category);
 
-            DB::commit();
+    //         DB::commit();
 
-            return redirect()
-                ->route('categories.index')
-                ->with('alert_success', 'La clasificación ha sido eliminada correctamente.');
+    //         return redirect()
+    //             ->route('categories.index')
+    //             ->with('alert_success', 'La clasificación ha sido eliminada correctamente.');
 
-        } catch (Exception $e) {
-            DB::rollback();
-            logger($e->getMessage());
-            logger($e->getTraceAsString());
-            return redirect()
-                ->back()->withErrors('La clasificación no pudo ser eliminada. Por favor contactar a administración');
-        }
-    }
+    //     } catch (Exception $e) {
+    //         DB::rollback();
+    //         logger($e->getMessage());
+    //         logger($e->getTraceAsString());
+    //         return redirect()
+    //             ->back()->withErrors('La clasificación no pudo ser eliminada. Por favor contactar a administración');
+    //     }
+    // }
 
 }
