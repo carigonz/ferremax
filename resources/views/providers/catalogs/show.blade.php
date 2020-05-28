@@ -36,7 +36,7 @@
                             <li>Nombre de archivo: {{ $catalog->file_name}}.</li>
                             <li>Última actialización: {{ $catalog->updated_at->format('d-m-Y')}}.</li>
                             <li>Condición de IVA: {{ (int)$catalog->taxes_amount}} %</li>
-                            @if ($parent = $provider->parent())
+                            @if (!is_null($provider->parent))
                                 <li>Distribuidora/Empresa: {{ $provider->name }}</li>
                                 <li>Corredor/Proveedor: {{ $provider->parent->name }}</li>
                             @else

@@ -118,7 +118,7 @@ class CatalogController extends Controller
             # Storage file 
             $file = $catalogRequest['file'];
             $file_name = $file->getClientOriginalName();
-            $file->move('files', $file_name);
+            $file->move('storage/files', $file_name);
             unset($catalogRequest['file']);
 
             # Prepare Catalog Instance
@@ -137,12 +137,13 @@ class CatalogController extends Controller
             # Store discounts instances
             if (isset($catalogRequest['discounts'])) {
                 foreach ($catalogRequest['discounts'] as $discount) {
-                    $this->discountRepository->create([
+                    $test = $this->discountRepository->create([
                         'discountable_id' => $catalog->id,
                         'discountable_type' => Catalog::class,
                         'amount' => floatval($discount),
                         'active' => true
                     ]);
+                    logger($test->amount);
                 }
             }
 
@@ -156,12 +157,23 @@ class CatalogController extends Controller
 
         } catch (Exception $e) {
             DB::rollback();
+            //$failures = $e->failures();
             logger($e->getMessage());
             logger($e->getTraceAsString());
+            /* $errors = [];
+
+            foreach ($failures as $failure) {
+                $row = $failure->row(); // row that went wrong
+                $key = $failure->attribute(); // either heading key (if using heading row concern) or column index
+                $error = $failure->errors(); // Actual error messages from Laravel validator
+                $value = $failure->values(); // The values of the row that has failed.
+                $errors[] = "El valor {$value} ingresado en {$key} es no pudo ser procesado, fila {$row}, error: {$error}.";
+            } */
+
             return redirect()->back()
-                //->withErrors($validator)
-                ->withInput($catalogRequest)
-                ->withErrors('La lista no pudo ser procesada. Verifique que los nombres de las columnas sean correctos. Por favor contactar a administración');
+                //->with('alert_danger', $errors)
+                ->withErrors($e->getMessage())
+                ->withInput($catalogRequest);
         }
     }
 

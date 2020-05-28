@@ -31,7 +31,7 @@ class ProviderController extends Controller
      */
     public function index()
     {
-        try {
+       // try {
             /** @var Collection $providers */
             $providers = $this->providerRepository->all();
 
@@ -42,13 +42,13 @@ class ProviderController extends Controller
                 ->with('providers', $providers)
                 ->with('providerTypes', $providerTypes);
 
-        } catch (Exception $e) {
-            logger($e->getMessage());
-            logger($e->getTraceAsString());
-            return redirect()
-                ->back()
-                ->withErrors('Ha ocurrido un error imprevisto. Por favor contactar a administración');
-        }
+        // } catch (Exception $e) {
+        //     logger($e->getMessage());
+        //     logger($e->getTraceAsString());
+        //     return redirect()
+        //         ->back()
+        //         ->withErrors('Ha ocurrido un error imprevisto. Por favor contactar a administración');
+        // }
     } 
     /**
      * Create new provider view

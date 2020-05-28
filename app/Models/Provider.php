@@ -50,7 +50,7 @@ class Provider extends Model
 
     public function scopeOfType($query, $type)
     {
-        return $query->where('type', 'LIKE', '%'. $type . '%');
+        return $this->providerType ? $query->ofType($type) : $query;
     }
 
     public function scopeOfCorredor($query)
@@ -65,6 +65,6 @@ class Provider extends Model
 
     public function isDistribuidoraType()
     {
-        return $this->providerType() ? $this->providerType->isDistribuidora() : false;
+        return $this->providerType ? $this->providerType->isDistribuidora() : false;
     }
 }

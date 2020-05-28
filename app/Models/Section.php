@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string|null $description
  * @property Collection $products
- * @property Category $category_id
+ * @property Category $category
  */
 class Section extends Model
 {

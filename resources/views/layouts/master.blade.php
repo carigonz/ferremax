@@ -43,7 +43,7 @@
 						
 						<ul class="navbar-nav mr-auto d-flex flex-row">
 							<li class="nav-item active">
-							<a class="nav-link" href="{{ Route('update')}}">Actualizar<span class="sr-only">(current)</span></a>
+							<a class="nav-link" href="{{ Route('search')}}"><i class="far fa-lightbulb"></i> Mis Productos<span class="sr-only">(current)</span></a>
 							</li>
 							@auth
 							<li class="nav-item dropdown">

@@ -50,6 +50,7 @@
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Descipción</th>
                                 <th scope="col">Tipo</th>
+                                <th scope="col">Corredor</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Acciones</th>
                                 </tr>
@@ -58,10 +59,11 @@
                                 @forelse ($providers as $provider)
                                 <tr>
                                     <th scope="row">{{ $provider->id }}</th>
-                                    <td>{{ $provider->name }}</td>
-                                    <td>{{ isset($provider->description) ? $provider->description : '' }}</td>
-                                    <td>{{ $provider->providerType->type }}</td>
-                                    <td>{{ $provider->status ? 'Activo' : 'Inactivo' }}</td>
+                                    <td class="text-center">{{ $provider->name }}</td>
+                                    <td class="text-center">{{ isset($provider->description) ? $provider->description : '' }}</td>
+                                    <td class="text-center">{{ $provider->providerType->type }}</td>
+                                    <td class="text-center">{{ $provider->parent ? $provider->parent->name : '-' }}</td>
+                                    <td class="text-center">{{ $provider->status ? 'Activo' : 'Inactivo' }}</td>
                                     <td>
                                         {!! Form::open(array('route' => array('providers.config', $provider->id), 'class'=>'d-inline', 'method' => 'GET')) !!}
                                         <button title="Configurar proveedor" type="submit" class="btn btn-outline-info btn-sm"><i class="fas fa-cog"></i></i></button>
