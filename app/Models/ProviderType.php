@@ -33,6 +33,11 @@ class ProviderType extends Model
     {
         return $this->type == 'Distribuidora';
     }
+
+    public function scopeOfType($query, $type)
+    {
+        return !$type ? $query : $query->where('provider_types.type', $type);
+    }
     
     
 

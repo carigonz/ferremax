@@ -19,11 +19,11 @@ Route::post('/ingresar', 'ProductController@create')->middleware('auth');
     
 Route::get('/search/action', 'ProductController@action')->middleware('auth')->name('search.action');
 
-Route::get('/update', 'ProductController@viewUpdate')->middleware('auth')->name('update');
+// Route::get('/update', 'ProductController@viewUpdate')->middleware('auth')->name('update');
 
-Route::post('/update', 'ProductController@update')->middleware('auth');
+// Route::post('/update', 'ProductController@update')->middleware('auth');
 
-Route::get('/update/asd', 'ProductController@update')->middleware('auth')->name('update.product');
+// Route::get('/update/asd', 'ProductController@update')->middleware('auth')->name('update.product');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -61,11 +61,11 @@ Route::group(['middleware' => 'auth'], function () {
     // products
     Route::resource('/products', 'ProductController')->name('*','products');
 
-    Route::get('/update', 'ProductController@viewUpdate')->name('update');
+    // Route::get('/update', 'ProductController@viewUpdate')->name('update');
     
-    Route::post('/update', 'ProductController@update');
+    // Route::post('/update', 'ProductController@update');
     
-    Route::get('/update/asd', 'ProductController@update')->name('update.product');
+    // Route::get('/update/asd', 'ProductController@update')->name('update.product');
     // Route::get('success', function () {
     //     return view('success');
     // })->middleware('auth'); 

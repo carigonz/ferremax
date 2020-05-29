@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Classification;
-use App\Models\Supplier;
 use App\Models\Product;
 use App\Repositories\ClassificationRepository;
 use App\Repositories\ProviderRepository;
@@ -12,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Repositories\SectionRepository;
 use App\Repositories\ProductRepository;
 use Exception;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
@@ -266,11 +265,10 @@ class ProductController extends Controller
 
 
     function action(Request $request)
-    {   //dd($request);
+    {   //sdd($request->all());
         //console.log($request);
         $data = "";
         $output = 0;
-        $suppliers = Supplier::all();
         $total_row = 0;
         $ya = 'test';
         if($request->ajax()){
@@ -281,14 +279,14 @@ class ProductController extends Controller
                 $data = Product::where("name", "LIKE", "%" . $query . "%")
                 ->orwhere("description", "LIKE", "%" . $query . "%")
                 ->orwhere("code", "LIKE", "%" . $query . "%")
-                ->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
+               // ->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
                 ->orderBy('name')
                 ->orderBy('description')
                 ->get();
 
             }else {
                 $data =  DB::table('products')
-                ->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
+              //  ->leftJoin('suppliers', 'id_supplier', '=', 'suppliers.id')
                 ->orderBy('name')
                 ->orderBy('description')
                 ->get();
@@ -299,32 +297,18 @@ class ProductController extends Controller
             if($total_row>0){
                 $i = 1;
                 foreach ($data as $key => $product) {
-                    if ($product->discount === 0){
                     $output.='<tr>'.
                     '<th scope="row">'.$i.'</th>'.
                     '<td>'.strtoupper($product->name).'</td>'.
                     '<td>'.ucfirst(strtolower($product->description)).'</td>'.
-                    '<td><a tabindex="0" href="#" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus"  title="descuento '.$product->discount*100
-                    .' %" data-html="true" onClick="searchFilter(' . $product->factoryName . ')" class="">'.$product->factoryName.'</a></td>'.
+                    '<td><a tabindex="0" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus" title="Descuento '. $product->discount*100 .' %" onClick="searchFilter(' . $product->factoryName . ')" data-html="true" class="">'.$product->catalog->name.'</a></td>'.
                     '<td class="d-none">'.$product->discount*100 .' %</td>'.
-                    '<td data-toggle="popover" data-trigger="focus" title=" '. $product->updated_at .'ss " data-html="true">'.$product->price.'</td>'.
-                    '<td class="bg-success text-center">'.round($product->price*1.6,2).'</td>'.
+                    '<td data-toggle="popover" data-trigger="focus" title=" ss'. $product->updated_at .' " data-html="true">'.$product->price .'</td>'.
+                    '<td class="bg-success text-center">'.
+                    $product->public_price
+                    .'</td>'.
                     '</tr>';
                     $i++;
-                    } else {
-                        $output.='<tr>'.
-                        '<th scope="row">'.$i.'</th>'.
-                        '<td>'.strtoupper($product->name).'</td>'.
-                        '<td>'.ucfirst(strtolower($product->description)).'</td>'.
-                        '<td><a tabindex="0" class="btn btn-lg btn-info" role="button" data-toggle="popover" data-trigger="focus" title="Descuento '. $product->discount*100 .' %" onClick="searchFilter(' . $product->factoryName . ')" data-html="true" class="">'.$product->factoryName.'</a></td>'.
-                        '<td class="d-none">'.$product->discount*100 .' %</td>'.
-                        '<td data-toggle="popover" data-trigger="focus" title=" ss'. $product->updated_at .' " data-html="true">'.$product->price .'</td>'.
-                        '<td class="bg-success text-center">'.
-                        round(($product->price-($product->price*$product->discount))*1.6,2)
-                        .'</td>'.
-                        '</tr>';
-                        $i++;
-                    }
                 }
             } else{
                     $output .= '
@@ -336,12 +320,14 @@ class ProductController extends Controller
             $encoded_output = mb_convert_encoding($output, 'UTF-8', 'UTF-8');
             $chan = array(
                 'table_data' => $encoded_output,
-                'total_data' => $total_row,
-                'suppliers_data' => $suppliers
+                'total_data' => $total_row
             );
             
             $finish = json_encode($chan);
             return $finish;
+            return response()->json([
+                'cosas' => 123
+            ]);
         }
         else {
             $query = $request->get('query');

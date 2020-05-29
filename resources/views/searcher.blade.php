@@ -7,16 +7,14 @@
 @extends('layouts/master')
 
 @section('main')
-<main class="body-container-searcher flex-column">
 		<div class="button-item">
 				<input type ='button' data-toggle="button" aria-pressed="false" autocomplete="off" class="btn btn-warning"  value = 'Nuevo Producto' onclick="location.href = '{{ Route('newProduct') }}'"/>
 		</div>
 		<div class="jumbotron">
+			<h1>holiz</h1>
 				<p class="lead">Este va a ser el buscador principal</p>
-				<hr class="my-4">{{-- 
-				<p>cuando creo la tabla del forEach de los resultados necesito un boton para agregar al nuevo presupuesto ?? </p> --}}
+				<hr class="my-4">
 				<form class="form-inline" method="get">
-					
 					{{ csrf_field() }}
 						<input autofocus class="form-control mr-sm-2 big-searcher" type="text" name="query" id="query" placeholder="Solo tenés que tipear tu búsqueda" aria-label="Search">
 						{{-- <button  onclick="{{ Route('search.action') }}" id="query" class="btn btn-primary btn-md my-2 my-sm-0 search-button" type="submit"><i class="fas fa-search big"></i></button> --}}
@@ -63,18 +61,10 @@
 			</main>
 			
 			<script>
-				
-				
-				const filterButtons = ['pvc','ppn','bronce','polietileno','epoxi','galvanizado','sigas','redeco','duratop'];
-				
-				function fetchData(query = '')
-				{
-					$.ajaxSetup({
-						headers: {
-							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-							
-						}
-					});
+
+				/* $('#query').keyup(function (e) { 
+					query = $(this).val();
+					console.log(query);
 					$.ajax({
 						url:'{{ route('search.action') }}',
 						method: 'GET',
@@ -82,55 +72,34 @@
 						dataType: 'json',
   						contentType : 'application/x-www-form-urlencoded; charset=UTF-8'
 					}).done( function(data){
-						console.log(data, `=====success response=====`);
+						console.log(`=====success response=====`);
+						console.log(data);
 						$('tbody').html(data.table_data);
 						$('#total_records').text(data.total_data);
 					}).fail( function(data){
-						console.log(data, `=======error=======`);
+						console.log(`=======error=======`);
+						console.log(data);
 					});
-				}
+				}); */
+				
+				
 
-				
-				function searchSupplier(id){
-					//const totalData = fetchData().filter( product => product.id_supplier === id);
-					$('tbody').filter('a').css( "background-color", "red" );
-				}
-				
-				const searchFilter = (filter) => fetchData(filter);
-				
-				$(document).ready(function () {
-					fetchData();
-					$('#query').keyup( function(){
-						let query = $(this).val();
-						fetchData(query);
-						//console.log(query);
-					});
-					$(function () {
-						$('[data-toggle="popover"]').popover()
-					});
-					$('.popover-dismiss').popover({
-						trigger: 'focus'
-					});
-					$(function () {
-						$('[data-toggle="tooltip"]').tooltip();
-						$('[data-toggle="popover"]').popover();  
-						$('#table-container').on('all.bs.table', function (e, name, args) {
-							$('[data-toggle="tooltip"]').tooltip();
-							$('[data-toggle="popover"]').popover();  
-						});
-					});
-				
-					
-					//button filters
-					let rowFilter = '';
-					const buttons = filterButtons.map( filter => {
-						rowFilter += `
-						<li><a href='#total_records' onClick="searchFilter('` + filter + `')" id="` + filter + `" class="btn btn-success">` + filter + `</a></li>
-						`
-					});
-					
-					$('.categories-filter .categories').append(rowFilter);
-				});
+
+				// 	$(function () {
+				// 		$('[data-toggle="popover"]').popover()
+				// 	});
+				// 	$('.popover-dismiss').popover({
+				// 		trigger: 'focus'
+				// 	});
+				// 	$(function () {
+				// 		$('[data-toggle="tooltip"]').tooltip();
+				// 		$('[data-toggle="popover"]').popover();  
+				// 		$('#table-container').on('all.bs.table', function (e, name, args) {
+				// 			$('[data-toggle="tooltip"]').tooltip();
+				// 			$('[data-toggle="popover"]').popover();  
+				// 		});
+				// 	});
+
 				</script>
 
 @endsection

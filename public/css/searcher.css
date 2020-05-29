@@ -1,9 +1,4 @@
 /* searcher.blade.php */
-.body-container-searcher {
-    min-height: 100vh;
-    background-color: bisque;
-    display: flex;
-}
 .big-searcher {
     width: 80vw;
     height: 68px;

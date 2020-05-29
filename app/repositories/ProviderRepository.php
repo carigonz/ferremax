@@ -74,4 +74,16 @@ class ProviderRepository extends AbstractRepository
             $joins->put($table, json_encode(compact('first', 'second', 'join_type')));
         }
     }
+
+    /** 
+     * @param string $type
+     * @return mixed
+     */
+    public function getAllDistribuidoraType()
+    {
+        return $this->model
+            ->select('providers.*')
+            ->join('provider_types', 'provider_types.id', '=', 'providers.provider_type_id')
+            ->where('provider_types.type', 'Distribuidora');
+    }
 }

@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $acronym
  * @property string|null $description
  * @property boolean $taxes
- * @property Provider $provider_id
+ * @property Provider $provider
  * @property float|null $taxes_amount
  * @property string $file_name
  * @property Collection|Discount $discounts

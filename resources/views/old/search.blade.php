@@ -1,13 +1,8 @@
-@section('css')
-	<link href="{{ asset('css/searcher.css') }}" rel="stylesheet" type="text/css" >
-@endsection
-
-@section('title', 'Buscador - Ferremax')
-		
 @extends('layouts/master')
 
+@section('title', 'Buscador - Ferremax')
+
 @section('main')
-<main class="body-container-searcher">
 		<div class="button-item">
 				<input type ='button' data-toggle="button" aria-pressed="false" autocomplete="off" class="btn btn-warning"  value = 'Nuevo Producto' onclick="location.href = '{{ Route('newProduct') }}'"/>
 		</div>
@@ -21,5 +16,4 @@
 						<button class="btn btn-primary btn-md my-2 my-sm-0 search-button" type="submit"><i class="fas fa-search big"></i></button>
 					</form>
 			</div>
-</main>
 @endsection

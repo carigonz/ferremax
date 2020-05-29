@@ -9,11 +9,12 @@ use Illuminate\Database\Eloquent\Model;
  * Class product 
  * 
  * @property string $code
+ * @property string $provider_code
  * @property string $name
  * @property float $price
  * @property float|null $public_price
  * @property bool|false $custom
- * @property Catalog $catalog_id
+ * @property Catalog $catalog
  * @property Section|null $section_id
  * @property string|null $description
  * @property int|null $stock
@@ -24,6 +25,7 @@ class Product extends Model
 
     protected $fillable = [
         'code',
+        'provider_code',
         'name',
         'price',
         'public_price',
@@ -34,7 +36,7 @@ class Product extends Model
         'stock'
     ];
 
-    protected $hidden = ['id','tariffs', 'sections'];
+    protected $hidden = ['id','tariffs', 'sections', 'catalog'];
 
     protected $with = [];
 
